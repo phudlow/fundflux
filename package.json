@@ -1,0 +1,23 @@
+{
+  "name": "fundflux",
+  "version": "1.0.0",
+  "description": "Manage cash flow",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": ""
+  },
+  "author": "Patrick Hudlow",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pg": "^7.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
