@@ -2,22 +2,17 @@ CREATE TABLE app_user (
     id              serial          PRIMARY KEY,
     email           varchar(50)     NOT NULL UNIQUE,
     password        varchar(60)     NOT NULL,
-    signup_date     timestamp       NOT NULL DEFAULT NOW(),
+    signup_date     timestamptz     NOT NULL DEFAULT NOW(),
     verified        boolean         NOT NULL,
-    verified_date   timestamp
+    verified_date   timestamptz
 );
 
-CREATE TABLE user_login (
-    user_id             int             NOT NULL REFERENCES app_user(id),
-    login_time          timestamp       NOT NULL DEFAULT NOW(),
-    token               varchar(60)     NOT NULL,
-    last_access_time    timestamp       NOT NULL DEFAULT NOW(),
-    logged_in           boolean
+-- For express-session's connect-pg-simple
+CREATE TABLE session (
+    sid         varchar         PRIMARY KEY,
+    sess        json            NOT NULL,
+	expire      timestamp(6)    NOT NULL
 );
-
--- Allow only one logged in email.  Any number of the same logged out emails may exist.
-CREATE UNIQUE INDEX one_logged_in_email_constraint ON user_login (user_id)
-    WHERE logged_in;
 
 -- Outer most encapsulater
 CREATE TABLE project (

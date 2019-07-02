@@ -12,4 +12,4 @@ function query(q, values) {
     });
 }
 
-module.exports = { query };
+module.exports = { query, pool };
