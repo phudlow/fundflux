@@ -2,7 +2,6 @@
     This file instantiates express session with our config.
     Uses connect-pg-simple to designate and configure PostgreSQL as the session store.
 */
-
 const { pool }        = require('../db');
 const uuid            = require('uuid');
 const expressSession  = require('express-session');

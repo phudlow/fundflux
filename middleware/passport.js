@@ -2,11 +2,12 @@
    This file instantiates and configures passport using the local strategy.
    User and session data is saved in PostgreSQL (see /routes/auth.js) 
 */
-
 const passport       = require('passport');
 const LocalStrategy  = require('passport-local').Strategy;
 const bcrypt         = require('bcrypt');
 const { query }      = require('../db');
+
+const { INVALID_CREDENTIALS } = require('../locale/en-us');
 
 // configure passport to use the local strategy for authentication
 passport.use(new LocalStrategy(
@@ -16,7 +17,7 @@ passport.use(new LocalStrategy(
         // Fetch user from db
         const user = (await query('SELECT * FROM app_user WHERE email=$1', [email])).rows[0];
         if (!user) {
-            return done(null, false, { message: 'Invalid credentials.\n' });
+            return done(null, false, { message: INVALID_CREDENTIALS });
         }
 
         // Verify password
@@ -24,7 +25,7 @@ passport.use(new LocalStrategy(
         if (isMatch) {
             done(null, user);
         } else {
-            done(null, false, { message: 'Invalid credentials.\n' });
+            done(null, false, { message: INVALID_CREDENTIALS });
         }
     }
 ));

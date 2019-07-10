@@ -1,24 +1,25 @@
 /**
     Router for handing auth endpoints
 */
-
 const passport = require('../middleware/passport');
 const router   = require('express').Router();
 
-// login credentials sent for authentication
+const { LOGIN_SUCCESSFUL } = require('../locale/en-us');
+
+// Login credentials sent for authentication
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
-        if (info)  { return res.status(422).send(info.message); }
+        if (info)  { return res.status(401).send({ error: info.message }); }
         if (err)   { return next(err); }
         if (!user) { return res.redirect('/login'); }
         req.login(user, (err) => {
             if (err) { return next(err); }
-            res.redirect('/');
+            res.send({ message: LOGIN_SUCCESSFUL });
         });
     })(req, res, next);
 });
 
-// login page
+// Login page
 router.get('/login', (req, res) => {
     if (req.isAuthenticated()) {
         return res.redirect('/');
@@ -26,18 +27,21 @@ router.get('/login', (req, res) => {
     res.send('Accessed the login page.');
 });
 
-// all routes declared after this require authentication
+router.get('/logout', function(req, res, next) {
+    if (req.isAuthenticated()) {
+        req.logout();
+        return res.redirect('/login?fromLogout=true');
+    }
+    res.redirect('/login');
+});
+
+// All routes declared after this require authentication
 router.use((req, res, next) => {
     if (!req.isAuthenticated()) {
         res.redirect('/login');
         return;
     }
     next();
-});
-
-router.get('/logout', function(req, res, next) {
-    req.logout();
-    res.redirect('/login');
 });
 
 router.get('/', (req, res) => {
