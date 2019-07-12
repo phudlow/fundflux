@@ -1,0 +1,36 @@
+body {
+    // margin: 0;
+    font-family: 'helvetica';
+}
+
+
+
+.error {
+    height: 1.2em;
+    font-size: 0.75em;
+    color: red;
+}
+
+#signup-success-modal {
+    border: 1px solid black;
+    background-color: beige;
+    position: relative;
+    opacity: 0;
+    &.visible {
+        animation-duration: 0.2s;
+        animation-name: modal-appear;
+        animation-fill-mode: forwards;
+        animation-timing-function: linear;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 0.5em;
+        right: 0.5em;
+    }
+}
+
+@keyframes modal-appear {
+    from { opacity: 0; top: 1em; }
+    to   { opacity: 1; top: 2em; }
+}

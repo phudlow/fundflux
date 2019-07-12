@@ -7,8 +7,6 @@ const LocalStrategy  = require('passport-local').Strategy;
 const bcrypt         = require('bcrypt');
 const { query }      = require('../db');
 
-const { INVALID_CREDENTIALS } = require('../locale/en-us');
-
 // configure passport to use the local strategy for authentication
 passport.use(new LocalStrategy(
     { usernameField: 'email' }, 
@@ -17,7 +15,7 @@ passport.use(new LocalStrategy(
         // Fetch user from db
         const user = (await query('SELECT * FROM app_user WHERE email=$1', [email])).rows[0];
         if (!user) {
-            return done(null, false, { message: INVALID_CREDENTIALS });
+            return done(null, false, { message: 'INVALID_CREDENTIALS' });
         }
 
         // Verify password
@@ -25,7 +23,7 @@ passport.use(new LocalStrategy(
         if (isMatch) {
             done(null, user);
         } else {
-            done(null, false, { message: INVALID_CREDENTIALS });
+            done(null, false, { message: 'INVALID_CREDENTIALS' });
         }
     }
 ));

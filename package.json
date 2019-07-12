@@ -3,13 +3,30 @@
   "version": "1.0.0",
   "description": "Manage cash flow",
   "scripts": {
-    "start:dev": "NODE_ENV=development nodemon server.js",
-    "start": "NODE_ENV=production node server.js",
-    "test": "jest --watch"
+    "server:dev": "NODE_ENV=development nodemon ./server",
+    "server": "NODE_ENV=production node ./server",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "webpack:build": "webpack --mode=production",
+    "webpack:watch": "webpack --watch --mode=development",
+    "webpack-dev-server": "webpack-dev-server --open --mode=development"
   },
   "jest": {
     "setupFiles": [
       "./tests/setupFiles.js"
+    ]
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/preset-react"
     ]
   },
   "author": "Patrick Hudlow",
@@ -26,13 +43,31 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.11.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.0.0",
+    "html-webpack-inline-source-plugin": "0.0.10",
+    "html-webpack-plugin": "^3.2.0",
     "jest": "^24.8.0",
     "jest-cli": "^24.8.0",
+    "minimist": "^1.2.0",
+    "node-sass": "^4.12.0",
     "nodemon": "^1.19.1",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7"
+    "request-promise-native": "^1.0.7",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.7.2",
+    "webpack-merge": "^4.2.1"
   }
 }

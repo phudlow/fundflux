@@ -1,0 +1,16 @@
+{
+    "errorMsgs": {
+        "email": {
+            "EMAIL_MISSING": "No email provided",
+            "EMAIL_INVALID": "Invalid email provided",
+            "EMAIL_UNAVAILABLE": "The requested email is unavailable."
+        },
+        "password": {
+            "PASSWORD_MISSING": "No password provided",
+            "PASSWORD_TOO_SHORT": "Passwords must be at least 8 characters long.",
+            "PASSWORD_CHAR_REQ_FAIL": "Passwords must contain 3 of the following types: uppercase, lowercase, numbers, special characters."
+        },
+        "INVALID_CREDENTIALS": "Invalid credentials"
+    },
+    "ACCOUNT_CREATED": "Account created successfully"
+}

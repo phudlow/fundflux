@@ -1,10 +1,8 @@
 /**
-    Router for handing auth endpoints
-*/
+ * Router for handing auth endpoints
+ */
 const passport = require('../middleware/passport');
 const router   = require('express').Router();
-
-const { LOGIN_SUCCESSFUL } = require('../locale/en-us');
 
 // Login credentials sent for authentication
 router.post('/login', (req, res, next) => {
@@ -14,7 +12,7 @@ router.post('/login', (req, res, next) => {
         if (!user) { return res.redirect('/login'); }
         req.login(user, (err) => {
             if (err) { return next(err); }
-            res.send({ message: LOGIN_SUCCESSFUL });
+            res.send({ message: 'LOGIN_SUCCESSFUL' });
         });
     })(req, res, next);
 });
@@ -24,9 +22,10 @@ router.get('/login', (req, res) => {
     if (req.isAuthenticated()) {
         return res.redirect('/');
     }
-    res.send('Accessed the login page.');
+    res.sendFile('login.html', { root: './dist/' });
 });
 
+// Terminate session
 router.get('/logout', function(req, res, next) {
     if (req.isAuthenticated()) {
         req.logout();
@@ -42,10 +41,6 @@ router.use((req, res, next) => {
         return;
     }
     next();
-});
-
-router.get('/', (req, res) => {
-    res.send('Accessed a page which requires auth.');
 });
 
 module.exports = router;

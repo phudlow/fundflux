@@ -1,4 +1,3 @@
-
 // Load environment vars
 require('dotenv').config();
 
@@ -25,6 +24,7 @@ app.use(passport.session());
 // Configure routes
 app.use(require('./routes/account'));
 app.use(require('./routes/auth'));
+app.use(require('./routes/app'));
 
 // Start server
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`));

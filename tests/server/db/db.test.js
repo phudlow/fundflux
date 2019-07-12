@@ -1,11 +1,10 @@
-const { query } = require('../db');
+const { query } = require('../../../server/db');
 
 let res;
 
 describe('Database connection', () => {
     test('can connect to database', async () => {
         res = await query('SELECT NOW()');
-
         expect(res.rowCount).toBe(1);
         expect(res.rows[0].now).toBeTruthy();
     });

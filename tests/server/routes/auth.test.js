@@ -5,16 +5,12 @@ const rp = require('request-promise-native').defaults({
 });
 
 const ROOT = process.env.SERVER_ROOT;
-const { 
-    INVALID_CREDENTIALS,
-    LOGIN_SUCCESSFUL
-} = require('../locale/en-us');
 
 let res, testUser, email, password;
 
 describe('Authentication', () => {
     beforeAll(async () => {
-        testUser = await require('./utils').createTestUser();
+        testUser = await require('../../utils').createTestUser();
         email    = testUser.email;
         password = testUser.password;
     });
@@ -27,7 +23,7 @@ describe('Authentication', () => {
         try { await rp.post(ROOT + '/login', { body: { email: 'not_exists_email@mail.com', password } }); }
         catch (err) { res = err.response; }
         expect(res.statusCode).toBe(401);
-        expect(res.body.error).toBe(INVALID_CREDENTIALS);
+        expect(res.body.error).toBe('INVALID_CREDENTIALS');
         expect(res.body.message).toBeFalsy();
     });
 
@@ -35,14 +31,14 @@ describe('Authentication', () => {
         try { await rp.post(ROOT + '/login', { body: { email, password: 'Wr0ngP@$SworD' } }); }
         catch (err) { res = err.response; }
         expect(res.statusCode).toBe(401);
-        expect(res.body.error).toBe(INVALID_CREDENTIALS);
+        expect(res.body.error).toBe('INVALID_CREDENTIALS');
         expect(res.body.message).toBeFalsy();
     });
 
     test('can login', async () => {
         res = await rp.post(ROOT + '/login', { body: { email, password } });
         expect(res.statusCode).toBe(200);
-        expect(res.body.message).toBe(LOGIN_SUCCESSFUL);
+        expect(res.body.message).toBe('LOGIN_SUCCESSFUL');
         expect(res.body.error).toBeFalsy();
     });
 
