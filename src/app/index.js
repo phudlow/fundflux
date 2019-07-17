@@ -9,8 +9,9 @@ class App extends Component {
     }
     render() {
         return (
-            <div>
+            <div id="app-page">
                 App
+                <a href="/logout">Logout</a>
             </div>
         )
     }

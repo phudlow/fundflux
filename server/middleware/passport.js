@@ -7,7 +7,7 @@ const LocalStrategy  = require('passport-local').Strategy;
 const bcrypt         = require('bcrypt');
 const { query }      = require('../db');
 
-// configure passport to use the local strategy for authentication
+// Configure passport to use the local strategy for authentication
 passport.use(new LocalStrategy(
     { usernameField: 'email' }, 
     async (email, password, done) => {
@@ -28,10 +28,10 @@ passport.use(new LocalStrategy(
     }
 ));
 
-// save user to the session store
+// Save user to the session store
 passport.serializeUser((user, done) => { done(null, user.id); });
 
-// retrieve user from the session store
+// Retrieve user from the session store
 passport.deserializeUser(async (id, done) => {
     query('SELECT * FROM app_user WHERE id=$1', [id])
     .then(res => done(null, res.rows[0]))

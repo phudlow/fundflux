@@ -5,7 +5,8 @@ import '../common.scss';
 
 import UserForm from '../shared/UserForm';
 
-import { LOGIN } from '../../locale/en-us/login';
+import { userForm } from '../../locale/en-us';
+const { errorMsgs, LOGIN } = userForm;
 
 class Login extends UserForm {
     constructor(props) {
@@ -46,6 +47,9 @@ class Login extends UserForm {
 
         if (data.error) {
             this.setState({
+                invalidMsg: {
+                    email: errorMsgs.INVALID_CREDENTIALS
+                },
                 processingRequest: false
             });
         }

@@ -26,7 +26,7 @@ router.get('/login', (req, res) => {
 });
 
 // Terminate session
-router.get('/logout', function(req, res, next) {
+router.get('/logout', function(req, res) {
     if (req.isAuthenticated()) {
         req.logout();
         return res.redirect('/login?fromLogout=true');

@@ -1,8 +1,6 @@
 {
     "userForm": {
-        "LOGIN_SUCCESSFUL": "Login successful",
-        "ACCOUNT_DELETED": "Account deleted successfully",
-
+        "LOGIN": "Login",
         "SIGN_UP": "Sign up",
         "errorMsgs": {
             "email": {
