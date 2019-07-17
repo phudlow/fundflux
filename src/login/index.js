@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import '../common.scss';
 
-console.log("Loaded LOGIN");
+import UserForm from '../shared/UserForm';
 
 class Login extends Component {
     constructor(props) {
@@ -11,8 +11,9 @@ class Login extends Component {
     }
     render() {
         return (
-            <div>
+            <div id="login-page">
                 Login
+                {/* <UserForm /> */}
             </div>
         )
     }

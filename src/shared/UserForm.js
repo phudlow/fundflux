@@ -1,12 +1,13 @@
 import React from 'react';
 
-function SignupForm(props) {
+function UserForm(props) {
     return (
         <form onSubmit={props.onSubmit}>
-            Sign up
-            <div>
+            <div className="title">{props.headerText}</div>
+            <div id="email">
                 <label>
                     <input name="email" type="text" placeholder="Email"
+                        value={props.email}
                         onChange={props.onChange}
                         onBlur={props.onBlur}
                         disabled={props.processingRequest}
@@ -14,9 +15,10 @@ function SignupForm(props) {
                     <div className="error">{props.invalidMsg.email}</div>
                 </label>
             </div>
-            <div>
+            <div id="password">
                 <label>
                     <input name="password" type="password" placeholder="Password"
+                        value={props.password}
                         onChange={props.onChange}
                         onBlur={props.onBlur}
                         disabled={props.processingRequest}
@@ -29,4 +31,4 @@ function SignupForm(props) {
     );
 }
 
-export default SignupForm;
+export default UserForm;

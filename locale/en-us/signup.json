@@ -1,4 +1,5 @@
 {
+    "SIGN_UP": "Sign up",
     "errorMsgs": {
         "email": {
             "EMAIL_MISSING": "No email provided",
@@ -12,5 +13,9 @@
         },
         "INVALID_CREDENTIALS": "Invalid credentials"
     },
-    "ACCOUNT_CREATED": "Account created successfully"
+    "successModalText": {
+        "SUCCESS": "Success! Your account has been created.",
+        "CHECK_EMAIL": "Please check your email to verify your account before logging in.",
+        "RETURN_TO_LOGIN": "Return to Login"
+    }
 }

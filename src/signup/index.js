@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 
 import '../common.scss';
 
-import SignupForm from './SignupForm';
+import UserForm from '../shared/UserForm';
 import SuccessModal from './SuccessModal';
 
-import { errorMsgs, ACCOUNT_CREATED } from '../../locale/en-us/signup';
+import { errorMsgs, successModalText, SIGN_UP } from '../../locale/en-us/signup';
 
 class Signup extends Component {
     constructor(props) {
@@ -34,10 +34,10 @@ class Signup extends Component {
         }
         this.unavailableEmails = [];
 
-        this.handleChange      = this.handleChange.bind(this);
-        this.handleSubmit      = this.handleSubmit.bind(this);
-        this.validateInput     = this.validateInput.bind(this);
-        this.closeSuccessModal = this.closeSuccessModal.bind(this);
+        this.handleChange            = this.handleChange.bind(this);
+        this.handleSubmit            = this.handleSubmit.bind(this);
+        this.validateInput           = this.validateInput.bind(this);
+        this.handleCloseSuccessModal = this.handleCloseSuccessModal.bind(this);
     }
     handleChange(e) {
         this.setState({
@@ -140,26 +140,31 @@ class Signup extends Component {
             });
         }
     }
-    closeSuccessModal() {
+    handleCloseSuccessModal() {
         this.setState({
             accountCreated: false,
-            processingRequest: false
-        })
+            processingRequest: false,
+            password: ''
+        });
     }
     render() {
         return (
-            <div>
-                <SignupForm
+            <div id="signup-page">
+                <UserForm
                     onSubmit={this.handleSubmit}
                     onChange={this.handleChange}
                     onBlur={this.validateInput}
                     processingRequest={this.state.processingRequest}
                     invalidMsg={this.state.invalidMsg}
+                    email={this.state.email}
+                    password={this.state.password}
+                    headerText={SIGN_UP}
                 />
                 <SuccessModal
                     email={this.state.email}
                     visible={this.state.accountCreated}
-                    onClose={this.closeSuccessModal}
+                    onClose={this.handleCloseSuccessModal}
+                    successModalText={successModalText}
                 />
             </div>
         );
