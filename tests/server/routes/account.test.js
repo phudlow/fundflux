@@ -10,7 +10,7 @@ const password = 'p@ssword123';
 let res;
 
 describe('Account Creation', () => {
-    test('cannot create an account with no email', async () => {
+    test('Cannot create an account with no email', async () => {
     
         // Blank email
         try { await rp.post(ROOT + '/signup', { body: { email: '', password } }); }
@@ -27,7 +27,7 @@ describe('Account Creation', () => {
         expect(res.body.message).toBeFalsy();
     });
 
-    test('cannot create an account with invalid email format', async () => {
+    test('Cannot create an account with invalid email format', async () => {
         try { await rp.post(ROOT + '/signup', { body: { email:'foo@bar@baz.com', password } }); } 
         catch (err) { res = err.response; }
         expect(res.statusCode).toBe(400);
@@ -35,7 +35,7 @@ describe('Account Creation', () => {
         expect(res.body.message).toBeFalsy();
     });
 
-    test('cannot create an account with no password', async () => {
+    test('Cannot create an account with no password', async () => {
 
         // Blank password
         try { await rp.post(ROOT + '/signup', { body: { password: '', email } }); } 
@@ -52,7 +52,7 @@ describe('Account Creation', () => {
         expect(res.body.message).toBeFalsy();
     });
 
-    test('cannot create an account with a password that is too short', async () => {
+    test('Cannot create an account with a password that is too short', async () => {
         try { await rp.post(ROOT + '/signup', { body: { password: 'aD3@', email } }); } 
         catch (err) { res = err.response; }
         expect(res.statusCode).toBe(422);
@@ -60,7 +60,7 @@ describe('Account Creation', () => {
         expect(res.body.message).toBeFalsy();
     });
 
-    test('cannot create an account with a password that does not meet character requirements', () => {
+    test('Cannot create an account with a password that does not meet character requirements', () => {
         const invalidPasswords = [ 'CheeseQuakeR', '9@$#31337', 'FR13ND1M13', 'nathan4u' ];
 
         invalidPasswords.forEach(async pw => {
@@ -72,14 +72,14 @@ describe('Account Creation', () => {
         });
     });
 
-    test('can create an account', async () => {
+    test('Can create an account', async () => {
         res = await rp.post(ROOT + '/signup', { body: { email, password } });
         expect(res.statusCode).toBe(201);
         expect(res.body.message).toBe('ACCOUNT_CREATED');
         expect(res.body.error).toBeFalsy();
     });
 
-    test('cannot create an account with an email that is already taken', async () => {
+    test('Cannot create an account with an email that is already taken', async () => {
         try { await rp.post(ROOT + '/signup', { body: { email, password } }); }
         catch (err) { res = err.response; }
         expect(res.statusCode).toBe(409);
@@ -89,7 +89,7 @@ describe('Account Creation', () => {
 });
 
 describe('Account Deletion', () => {
-    test('cannot delete an account using incorrect credentials', async () => {
+    test('Cannot delete an account using incorrect credentials', async () => {
         try { await rp.post(ROOT + '/delete-account', { body: { email, password: 'wordp@ss321' } }); }
         catch (err) { res = err.response; }
         expect(res.statusCode).toBe(401);
@@ -97,14 +97,14 @@ describe('Account Deletion', () => {
         expect(res.body.message).toBeFalsy();
     });
 
-    test('can delete an account', async () => {
+    test('Can delete an account', async () => {
         res = await rp.post(ROOT + '/delete-account', { body: { email, password } });
         expect(res.statusCode).toBe(200);
         expect(res.body.message).toBe('ACCOUNT_DELETED');
         expect(res.body.error).toBeFalsy();
     });
 
-    test('can create an account using email of deleted account', async () => {
+    test('Can create an account using email of deleted account', async () => {
         res = await rp.post(ROOT + '/signup', { body: { email, password } });
         expect(res.statusCode).toBe(201);
         expect(res.body.message).toBe('ACCOUNT_CREATED');
