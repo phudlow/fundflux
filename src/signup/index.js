@@ -6,9 +6,10 @@ import '../common.scss';
 import UserForm from '../shared/UserForm';
 import SuccessModal from './SuccessModal';
 
-import { errorMsgs, successModalText, SIGN_UP } from '../../locale/en-us/signup';
+import { userForm } from '../../locale/en-us';
+const { errorMsgs, successModalText, SIGN_UP } = userForm;
 
-class Signup extends Component {
+class Signup extends UserForm {
     constructor(props) {
         super(props);
 
@@ -23,73 +24,37 @@ class Signup extends Component {
             accountCreated: false
         }
 
-        this.validationRegexes = {
-            email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            password: {
-                lowerCase: /[a-z]/,
-                upperCase: /[A-Z]/,
-                digit: /[0-9]/,
-                specialChar: /[ \!"#\$%&'\(\)\*\+,\-\.\/\:;\<\=\>\?@\[\\\]\^_`\{\|\}~]/
-            }
+        this.passwordCharRegexes = {
+            lowerCase: /[a-z]/,
+            upperCase: /[A-Z]/,
+            digit: /[0-9]/,
+            specialChar: /[ \!"#\$%&'\(\)\*\+,\-\.\/\:;\<\=\>\?@\[\\\]\^_`\{\|\}~]/
         }
+
         this.unavailableEmails = [];
 
-        this.handleChange            = this.handleChange.bind(this);
         this.handleSubmit            = this.handleSubmit.bind(this);
-        this.validateInput           = this.validateInput.bind(this);
         this.handleCloseSuccessModal = this.handleCloseSuccessModal.bind(this);
     }
-    handleChange(e) {
-        this.setState({
-            [e.target.name]: e.target.value,
-        });
-    }
-    validateInput(e) {
-        let newInvalidMsg;
-
-        // If no DOM event designating an input is passed, all inputs are validated
-        if (e) {
-            const inputName = e.target.name;
-            newInvalidMsg = {
-                [inputName]: this[inputName + 'Validate'](this.state[inputName])
-            };
-        }
-        else {
-            newInvalidMsg = {
-                email: this['emailValidate'](this.state.email),
-                password: this['passwordValidate'](this.state.password)
-            };
-        }
-
-        return new Promise(resolve => {
-            this.setState({
-                invalidMsg: Object.assign({}, this.state.invalidMsg, newInvalidMsg)
-            }, resolve);
-        });
-    }
     emailValidate(email) {
-        if (!email.length) {
-            return errorMsgs.email.EMAIL_MISSING;
-        }
-        if (!this.validationRegexes.email.test(email)) {
-            return errorMsgs.email.EMAIL_INVALID;
-        };
+        let invalidMsg = super.emailValidate(email);
+
         if (this.unavailableEmails.includes(email)) {
             return errorMsgs.email.EMAIL_UNAVAILABLE;
-        };
-        return null;
+        }
+
+        return invalidMsg;
     }
     passwordValidate(password) {
-        if (!password.length) {
-            return errorMsgs.password.PASSWORD_MISSING;
-        }
-        if (password.length < 8) {
-            return errorMsgs.password.PASSWORD_TOO_SHORT;
+        let invalidMsg = super.passwordValidate(password);
+
+        if (invalidMsg) {
+            return invalidMsg;
         }
 
         let numCharTypes = 0;
-        for (let charType in this.validationRegexes.password) {
-            if (password.match(this.validationRegexes.password[charType])) {
+        for (let charType in this.passwordCharRegexes) {
+            if (password.match(this.passwordCharRegexes[charType])) {
                 numCharTypes++;
             }
         }
@@ -97,7 +62,7 @@ class Signup extends Component {
             return errorMsgs.password.PASSWORD_CHAR_REQ_FAIL;
         }
 
-        return null;
+        return invalidMsg;
     }
     async handleSubmit(e) {
         e.preventDefault();
@@ -109,7 +74,7 @@ class Signup extends Component {
         }
 
         this.setState({ processingRequest: true });
-        const res = await fetch(SERVER_ROOT + '/signup', {
+        const res = await fetch('/signup', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
@@ -150,16 +115,8 @@ class Signup extends Component {
     render() {
         return (
             <div id="signup-page">
-                <UserForm
-                    onSubmit={this.handleSubmit}
-                    onChange={this.handleChange}
-                    onBlur={this.validateInput}
-                    processingRequest={this.state.processingRequest}
-                    invalidMsg={this.state.invalidMsg}
-                    email={this.state.email}
-                    password={this.state.password}
-                    headerText={SIGN_UP}
-                />
+                <div>{SIGN_UP}</div>
+                {super.render()}
                 <SuccessModal
                     email={this.state.email}
                     visible={this.state.accountCreated}

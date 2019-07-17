@@ -98,7 +98,6 @@ test('Signup end-to-end functionality', async (done) => {
     await page.click('#signup-success-modal a');
     expect(await page.waitForSelector('#login-page')).toBeTruthy();
     await page.close();
-    await browser.close();
 
     // Clean up 2 created accounts
     res = await rp.post(process.env.SERVER_ROOT + '/delete-account', { body: { email, password } });
@@ -111,4 +110,4 @@ test('Signup end-to-end functionality', async (done) => {
     expect(res.body.error).toBeFalsy();
 
     done();
-}, 12000);
+}, 15000);
