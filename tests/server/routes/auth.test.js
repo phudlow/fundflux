@@ -44,28 +44,24 @@ describe('Authentication', () => {
 
     test('going to /login while logged-in redirects to home', async () => {
         const res = await rp.get(ROOT + '/login');
-
         expect(res.req.path).toBe('/')
         expect(res.statusCode).toBe(200);
     });
 
     test('can logout, redirects to login', async () => {
         const res = await rp.get(ROOT + '/logout');
-
         expect(res.req.path).toBe('/login?fromLogout=true');
         expect(res.statusCode).toBe(200);
     });
 
     test('going to logout when logged-out redirects to login', async () => {
         const res = await rp.get(ROOT + '/logout');
-
         expect(res.req.path).toBe('/login');
         expect(res.statusCode).toBe(200);
     });
 
     test('going to home when logged-out redirects to login', async () => {
         const res = await rp.get(ROOT + '/');
-
         expect(res.req.path).toBe('/login');
         expect(res.statusCode).toBe(200);
     });

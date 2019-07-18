@@ -37,8 +37,10 @@ router.get('/logout', function(req, res) {
 // All routes declared after this require authentication
 router.use((req, res, next) => {
     if (!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
+        if (req.method === 'GET') {
+            return res.redirect('/login');
+        }
+        return res.sendStatus(401);
     }
     next();
 });

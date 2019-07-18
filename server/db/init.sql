@@ -14,10 +14,10 @@ CREATE TABLE session (
 	expire      timestamp(6)    NOT NULL
 );
 
--- Outer most encapsulater
+-- Outer most encapsulator
 CREATE TABLE project (
     id              serial          PRIMARY KEY,
-    user_id         int             NOT NULL REFERENCES app_user(id),
+    user_id         int             NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
     name            varchar(50),
     description     varchar(1000)
 );
@@ -52,7 +52,7 @@ CREATE TABLE transaction_event (
 CREATE TABLE delta (
     id              serial          PRIMARY KEY,
     transaction_id  int             NOT NULL REFERENCES transaction_event(id) ON DELETE CASCADE,
-    account_id      int             NOT NULL REFERENCES account(id) ON DELETE CASCADE,
+    account_id      int             NOT NULL REFERENCES account(id), -- ON DELETE CASCADE,
     name            varchar(50),
     description     varchar(1000),
     value           numeric(15, 2)  NOT NULL

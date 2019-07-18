@@ -1,20 +1,3 @@
-
-// Going to / (app) redirects to /login in not signed in
-
-// Client validation to lighten load on server
-// EMAIL_MISSING
-// EMAIL_INVALID
-// PASSWORD_MISSING
-// PASSWORD_TOO_SHORT
-
-// CANNOT LOGIN WITH UNRECOGNIZED EMAIL
-// CANNOT LOGIN WITH WRONG PASSWORD
-
-// Can login
-// Going to login while logged-in redirects to / (app)
-// Can logout
-// Going to / (app) redirects to /login in not signed in
-
 const { inputIntoUserForm, createTestUser } = require('../utils');
 
 const errorMsgs = require('../../locale/en-us').userForm.errorMsgs;

@@ -1,28 +1,44 @@
 const ROOT = process.env.SERVER_ROOT;
 const uuid = require('uuid');
-const rp = require('request-promise-native').defaults({ 
+const rp = require('request-promise-native');
+const rpOpts = {
     resolveWithFullResponse: true,
-    json: true 
-});
+    json: true,
+    jar: true   // for cookies
+};
 
 function createTestUser (options = {}) {
     const { email = `${uuid()}@testuser.com`, password = uuid() } = options;
 
+    // Create new instance so that users get their own session cookies
+    const client = rp.defaults(rpOpts);
+
     const userObj = {
         email,
         password,
+        client,
+        get: client.get,
+        post: client.post,
+        delete: client.delete,
+        put: client.put,
         remove: () => {
             return new Promise((resolve, reject) => {
-                rp.post(ROOT + '/delete-account', { body: { email, password } })
+                client.post(ROOT + '/delete-account', { body: { email, password } })
                 .then(res => resolve(res))
                 .catch(err => reject(err));
             })
         },
-        // login: () => {}
+        login: () => {
+            return new Promise((resolve, reject) => {
+                client.post(ROOT + '/login', { body: { email, password } })
+                .then(res => resolve(res))
+                .catch(err => reject(err));
+            });
+        }
     };
 
     return new Promise((resolve, reject) => {
-        rp.post(ROOT + '/signup', { body: { email, password } })
+        client.post(ROOT + '/signup', { body: { email, password } })
         .then(res => resolve(userObj))
         .catch(err => resolve(err));
     });
