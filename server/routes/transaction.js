@@ -14,12 +14,16 @@ router.post('/transaction', async (req, res) => {
 });
 
 router.delete('/transaction/:id', async (req, res) => {
-    const result = await query('SELECT * FROM transaction_event WHERE id=$1', [req.params.id]);
+    let result = await query('SELECT * FROM transaction_event WHERE id=$1', [req.params.id]);
     if (!result.rows.length) {
-        res.sendStatus(404);
+        return res.sendStatus(404);
     }
+
+    result = await query(
+        'SELECT user_id FROM project WHERE id IN (SELECT project_id FROM plan WHERE id=$1)',
+        [result.rows[0].plan_id]);
     if (result.rows[0].user_id !== req.user.id) {
-        res.sendStatus(403);
+        return res.sendStatus(403);
     } 
     await query('DELETE FROM transaction_event WHERE id=$1 RETURNING id', [req.params.id]);
     res.json({ 

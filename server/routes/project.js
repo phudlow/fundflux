@@ -14,30 +14,16 @@ router.post('/project', async (req, res) => {
 });
 
 router.delete('/project/:id', async (req, res) => {
-    const result = await query('SELECT * FROM project WHERE id=$1', [req.params.id]);
+    let result = await query('SELECT * FROM project WHERE id=$1', [req.params.id]);
     if (!result.rows.length) {
-        res.sendStatus(404);
+        return res.sendStatus(404);
     }
     if (result.rows[0].user_id !== req.user.id) {
-        res.sendStatus(403);
+        return res.sendStatus(403);
     } 
     await query('DELETE FROM project WHERE id=$1 RETURNING id', [req.params.id]);
     res.json({ 
         message: 'PROJECT_DELETED'
-    });
-});
-
-// TODO: will send this with initial state, probably not needed
-router.get('/project/:id', async (req, res) => {
-    const result = await query('SELECT * FROM project WHERE id=$1', [req.params.id]);
-    if (!result.rows.length) {
-        res.sendStatus(404);
-    }
-    if (result.rows[0].user_id !== req.user.id) {
-        res.sendStatus(403);
-    } 
-    res.json({ 
-        data: result.rows[0]
     });
 });
 

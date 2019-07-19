@@ -14,12 +14,16 @@ router.post('/account', async (req, res) => {
 });
 
 router.delete('/account/:id', async (req, res) => {
-    const result = await query('SELECT * FROM account WHERE id=$1', [req.params.id]);
+    let result = await query('SELECT * FROM account WHERE id=$1', [req.params.id]);
     if (!result.rows.length) {
-        res.sendStatus(404);
+        return res.sendStatus(404);
     }
+
+    result = await query(
+        'SELECT user_id FROM project WHERE id=$1',
+        [result.rows[0].project_id]);
     if (result.rows[0].user_id !== req.user.id) {
-        res.sendStatus(403);
+        return res.sendStatus(403);
     } 
     await query('DELETE FROM account WHERE id=$1 RETURNING id', [req.params.id]);
     res.json({ 

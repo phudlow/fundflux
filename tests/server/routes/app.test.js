@@ -9,6 +9,12 @@ const ROOT = process.env.SERVER_ROOT;
 const testData = {
     projects: [
         {
+            name: "Business",
+            description: "For personal accounts",
+            accounts: [],
+            plans: []
+        },
+        {
             name: "Personal",
             description: "For personal accounts",
             accounts: [
@@ -23,9 +29,21 @@ const testData = {
             ],
             plans: [
                 {
+                    name: "Long-term",
+                    description: "-- Description --",
+                    transactions: []
+                },
+                {
                     name: "Current",
                     description: null,
                     transactions: [
+                        {
+                            name: "Investments",
+                            description: "Income from investments",
+                            start_date: "2010-05-15",
+                            frequency: "monthly",
+                            deltas: []
+                        },
                         {
                             name: "Salary",
                             description: "Income from job",
@@ -42,27 +60,13 @@ const testData = {
                                     accountName: "Savings",
                                     value: "500.00",
                                     name: "Salary to Savings",
-                                    description: "TODO"
+                                    description: "Save up"
                                 }
                             ]
                         }
                     ]
-                },
-                {
-                    id: 1,
-                    project_id: 1,
-                    name: "Long-term",
-                    description: "-- Description --",
-                    transactions: []
                 }
             ]
-        },
-        {
-            id: 1,
-            name: "Business",
-            description: "For personal accounts",
-            accounts: [],
-            plans: []
         }
     ]
 };
@@ -71,16 +75,36 @@ const testData = {
 const testData2 = {
     projects: [
         {
-            name: "Personal",
-            description: "For personal accounts",
-            accounts: [],
-            plans: []
-        },
-        {
-            name: "Hypothetical",
-            description: "Winnin' that lottery",
-            accounts: [],
-            plans: []
+            name: "Another user's project",
+            description: "Another user's project description",
+            accounts: [
+                {
+                    name: "Another user's account",
+                    description: "Another user's account description"
+                },
+            ],
+            plans: [
+                {
+                    name: "Another user's plan",
+                    description: "Another user's plan description",
+                    transactions: [
+                        {
+                            name: "Another user's transaction",
+                            description: "Another user's transaction description",
+                            start_date: "2015-09-07",
+                            frequency: "yearly",
+                            deltas: [
+                                {
+                                    accountName: "Another user's account",
+                                    value: "70000.00",
+                                    name: "Another user's delta",
+                                    description: "Another user's delta description"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 };
@@ -204,7 +228,7 @@ describe('API endpoints for app', () => {
         testUser2 = await createTestUser();
         await testUser2.login();
         await setInitialData(testUser2, testData2);
-    });
+    }, 15000);
 
     afterAll(async () => {
         await testUser.remove();
@@ -216,17 +240,85 @@ describe('API endpoints for app', () => {
             testUser.get(ROOT + '/appdata'),
             testUser2.get(ROOT + '/appdata')
         ]);
-        expect(1).toBeTruthy();
-
         expect(results.map(res => sortDeep(res))).toEqual([
             { data: sortDeep(testData) },
             { data: sortDeep(testData2) }
         ]);
     });
 
-    // Can delete delta, (DELETE, delete from testData, see that GET /appdata matches expected)
-    // Can delete transaction, (DELETE, delete from testData, see that GET /appdata matches expected)
-    // Can delete plan, (DELETE, delete from testData, see that GET /appdata matches expected)
-    // Can delete project, (DELETE, delete from testData, see that GET /appdata matches expected)
-    // Can delete user, (DELETE, delete from testData, see that GET /appdata matches expected (from other testUser2's))
-}, 20000);
+    test('Can delete delta', async () => {
+        const delta = testData.projects[1].plans[1].transactions[1].deltas[1];
+        await testUser.delete(ROOT + '/delta/' + delta.id);
+        testData.projects[1].plans[1].transactions[1].deltas.pop();
+
+        const results = await Promise.all([
+            testUser.get(ROOT + '/appdata'),
+            testUser2.get(ROOT + '/appdata')
+        ]);
+        expect(results.map(res => sortDeep(res))).toEqual([
+            { data: sortDeep(testData) },
+            { data: sortDeep(testData2) }
+        ]);
+    });
+
+    test('Can delete transaction', async () => {
+        const transaction = testData.projects[1].plans[1].transactions[1];
+        await testUser.delete(ROOT + '/transaction/' + transaction.id);
+        testData.projects[1].plans[1].transactions.pop();
+
+        const results = await Promise.all([
+            testUser.get(ROOT + '/appdata'),
+            testUser2.get(ROOT + '/appdata')
+        ]);
+        expect(results.map(res => sortDeep(res))).toEqual([
+            { data: sortDeep(testData) },
+            { data: sortDeep(testData2) }
+        ]);
+    });
+
+    test('Can delete plan', async () => {
+        const plan = testData.projects[1].plans[1];
+        await testUser.delete(ROOT + '/plan/' + plan.id);
+        testData.projects[1].plans.pop();
+
+        const results = await Promise.all([
+            testUser.get(ROOT + '/appdata'),
+            testUser2.get(ROOT + '/appdata')
+        ]);
+        expect(results.map(res => sortDeep(res))).toEqual([
+            { data: sortDeep(testData) },
+            { data: sortDeep(testData2) }
+        ]);
+    });
+
+    test('Can delete account', async () => {
+        const account = testData.projects[1].accounts[1];
+        await testUser.delete(ROOT + '/account/' + account.id);
+        testData.projects[1].accounts.pop();
+
+        const results = await Promise.all([
+            testUser.get(ROOT + '/appdata'),
+            testUser2.get(ROOT + '/appdata')
+        ]);
+        expect(results.map(res => sortDeep(res))).toEqual([
+            { data: sortDeep(testData) },
+            { data: sortDeep(testData2) }
+        ]);
+    });
+
+    test('Can delete project', async () => {
+        const project = testData.projects[1];
+        await testUser.delete(ROOT + '/project/' + project.id);
+        testData.projects.pop();
+
+        const results = await Promise.all([
+            testUser.get(ROOT + '/appdata'),
+            testUser2.get(ROOT + '/appdata')
+        ]);
+        expect(results.map(res => sortDeep(res))).toEqual([
+            { data: sortDeep(testData) },
+            { data: sortDeep(testData2) }
+        ]);
+    });
+
+});

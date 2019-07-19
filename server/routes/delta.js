@@ -14,12 +14,15 @@ router.post('/delta', async (req, res) => {
 });
 
 router.delete('/delta/:id', async (req, res) => {
-    const result = await query('SELECT * FROM delta WHERE id=$1', [req.params.id]);
+    let result = await query('SELECT * FROM delta WHERE id=$1', [req.params.id]);
     if (!result.rows.length) {
-        res.sendStatus(404);
+        return res.sendStatus(404);
     }
+    result = await query(
+        'SELECT user_id FROM project WHERE id IN (SELECT project_id FROM plan WHERE id IN (SELECT plan_id FROM transaction_event WHERE id=$1))',
+        [result.rows[0].transaction_id]);
     if (result.rows[0].user_id !== req.user.id) {
-        res.sendStatus(403);
+        return res.sendStatus(403);
     } 
     await query('DELETE FROM delta WHERE id=$1 RETURNING id', [req.params.id]);
     res.json({ 
