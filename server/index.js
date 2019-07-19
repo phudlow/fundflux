@@ -26,6 +26,10 @@ app.use(require('./routes/user'));
 app.use(require('./routes/auth'));
 app.use(require('./routes/app'));
 app.use(require('./routes/project'));
+app.use(require('./routes/plan'));
+app.use(require('./routes/account'));
+app.use(require('./routes/transaction'));
+app.use(require('./routes/delta'));
 
 // Start server
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`));

@@ -39,6 +39,7 @@ CREATE TABLE account (
 );
 
 -- Holds deltas to be performed at certain times
+-- (note: transaction is a reserved word, hence transaction_event)
 CREATE TABLE transaction_event (
     id              serial          PRIMARY KEY,
     plan_id         int             NOT NULL REFERENCES plan(id) ON DELETE CASCADE,

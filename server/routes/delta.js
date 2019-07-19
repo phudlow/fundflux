@@ -1,0 +1,30 @@
+const { query } = require('../db');
+const router = require('express').Router();
+
+router.post('/delta', async (req, res) => {
+    const result = await query(
+        `INSERT INTO delta (transaction_id, account_id, name, description, value) VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        [req.body.transaction_id, req.body.account_id, req.body.name, req.body.description, req.body.value]);
+
+    res.json({ 
+        message: 'DELTA_CREATED',
+        data: result.rows[0]
+    });
+});
+
+router.delete('/delta/:id', async (req, res) => {
+    const result = await query('SELECT * FROM delta WHERE id=$1', [req.params.id]);
+    if (!result.rows.length) {
+        res.sendStatus(404);
+    }
+    if (result.rows[0].user_id !== req.user.id) {
+        res.sendStatus(403);
+    } 
+    await query('DELETE FROM delta WHERE id=$1 RETURNING id', [req.params.id]);
+    res.json({ 
+        message: 'DELTA_DELETED'
+    });
+});
+
+module.exports = router;
