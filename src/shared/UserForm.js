@@ -18,20 +18,17 @@ class UserForm extends Component {
         });
     }
     validateInput(e) {
-        let newInvalidMsg;
+        let newInvalidMsg = {};
 
         // If no DOM event designating an input is passed, all inputs are validated
         if (e) {
             const inputName = e.target.name;
-            newInvalidMsg = {
-                [inputName]: this[inputName + 'Validate'](this.state[inputName])
-            };
+            newInvalidMsg[inputName] = this[inputName + 'Validate'](this.state[inputName]);
         }
         else {
-            newInvalidMsg = {
-                email: this['emailValidate'](this.state.email),
-                password: this['passwordValidate'](this.state.password)
-            };
+            for (const inputName in this.state.invalidMsg) {
+                newInvalidMsg[inputName] = this[inputName + 'Validate'](this.state[inputName]);
+            }
         }
 
         return new Promise(resolve => {

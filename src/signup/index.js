@@ -16,9 +16,11 @@ class Signup extends UserForm {
         this.state = {
             email: '',
             password: '',
+            confirmPassword: '',
             invalidMsg: {
                 email: undefined,
-                password: undefined
+                password: undefined,
+                confirmPassword: undefined
             },
             processingRequest: false,
             accountCreated: false
@@ -63,6 +65,12 @@ class Signup extends UserForm {
         }
 
         return invalidMsg;
+    }
+    confirmPasswordValidate(confirmPassword) {
+        if (confirmPassword !== this.state.password) {
+            return errorMsgs.password.PASSWORDS_DONT_MATCH;
+        }
+        return null;
     }
     async handleSubmit(e) {
         e.preventDefault();
@@ -109,14 +117,51 @@ class Signup extends UserForm {
         this.setState({
             accountCreated: false,
             processingRequest: false,
-            password: ''
+            password: '',
+            confirmPassword: ''
         });
     }
     render() {
         return (
             <div id="signup-page">
                 <div>{SIGN_UP}</div>
-                {super.render()}
+                <form onSubmit={this.handleSubmit}>
+                    <div className="title">{this.headerText}</div>
+                    <div id="email">
+                        <label>
+                            <input name="email" type="text" placeholder="Email"
+                                value={this.state.email}
+                                onChange={this.handleChange}
+                                onBlur={this.validateInput}
+                                disabled={this.state.processingRequest}
+                            />
+                            <div className="error">{this.state.invalidMsg.email}</div>
+                        </label>
+                    </div>
+                    <div id="password">
+                        <label>
+                            <input name="password" type="password" placeholder="Password"
+                                value={this.state.password}
+                                onChange={this.handleChange}
+                                onBlur={this.validateInput}
+                                disabled={this.state.processingRequest}
+                            />
+                            <div className="error">{this.state.invalidMsg.password}</div>
+                        </label>
+                    </div>
+                    <div id="confirm-password">
+                            <label>
+                                <input name="confirmPassword" type="password" placeholder="Confirm Password"
+                                    value={this.state.confirmPassword}
+                                    onChange={this.handleChange}
+                                    onBlur={this.validateInput}
+                                    disabled={this.state.processingRequest}
+                                />
+                                <div className="error">{this.state.invalidMsg.confirmPassword}</div>
+                            </label>
+                        </div>
+                    <input type="submit" disabled={this.state.processingRequest} />
+                </form>q
                 <SuccessModal
                     email={this.state.email}
                     visible={this.state.accountCreated}

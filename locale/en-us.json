@@ -11,7 +11,8 @@
             "password": {
                 "PASSWORD_MISSING": "No password provided",
                 "PASSWORD_TOO_SHORT": "Passwords must be at least 8 characters long.",
-                "PASSWORD_CHAR_REQ_FAIL": "Passwords must contain 3 of the following types: uppercase, lowercase, numbers, special characters."
+                "PASSWORD_CHAR_REQ_FAIL": "Passwords must contain 3 of the following types: uppercase, lowercase, numbers, special characters.",
+                "PASSWORDS_DONT_MATCH": "Passwords do not match."
             },
             "INVALID_CREDENTIALS": "Invalid credentials"
         },

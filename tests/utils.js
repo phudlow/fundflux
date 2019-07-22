@@ -44,8 +44,8 @@ function createTestUser (options = {}) {
     });
 }
 
-async function inputIntoUserForm(page, email, password) {
-    if (email !== null) {
+async function inputIntoUserForm(page, email, password, confirmPassword) {
+    if (typeof email === 'string') {
         await page.click('input[name=email]');
         await page.keyboard.down('Control');
         await page.keyboard.press('KeyA');
@@ -53,13 +53,21 @@ async function inputIntoUserForm(page, email, password) {
         await page.keyboard.press('Delete');
         await page.keyboard.type(email);
     }
-    if (password !== null) {
+    if (typeof password === 'string') {
         await page.click('input[name=password]');
         await page.keyboard.down('Control');
         await page.keyboard.press('KeyA');
         await page.keyboard.up('Control');
         await page.keyboard.press('Delete');
         await page.keyboard.type(password);
+    }
+    if (typeof confirmPassword === 'string') {
+        await page.click('input[name=confirmPassword]');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('KeyA');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Delete');
+        await page.keyboard.type(confirmPassword);
     }
 }
 

@@ -3,9 +3,9 @@ const router = require('express').Router();
 
 router.post('/transaction', async (req, res) => {
     const result = await query(
-        `INSERT INTO transaction_event (plan_id, name, description, start_date, frequency) VALUES ($1, $2, $3, $4, $5)
+        `INSERT INTO transaction_event (plan_id, name, description, start_date, frequency, end_date) VALUES ($1, $2, $3, $4, $5, $6)
          RETURNING *`,
-        [req.body.plan_id, req.body.name, req.body.description, req.body.start_date, req.body.frequency]);
+        [req.body.plan_id, req.body.name, req.body.description, req.body.start_date, req.body.frequency, req.body.end_date]);
 
     res.json({ 
         message: 'TRANSACTION_CREATED',

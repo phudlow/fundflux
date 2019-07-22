@@ -45,8 +45,9 @@ CREATE TABLE transaction_event (
     plan_id         int             NOT NULL REFERENCES plan(id) ON DELETE CASCADE,
     name            varchar(50)     NOT NULL,
     description     varchar(1000),
+    frequency       varchar(15)     NOT NULL,
     start_date      date            NOT NULL,
-    frequency       varchar(15)     NOT NULL
+    end_date      date,
 );
 
 -- A flux of fund

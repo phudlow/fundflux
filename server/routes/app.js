@@ -13,7 +13,7 @@ router.get('/appdata', async (req, res) => {
     const selectPlansByProjectId =
         'SELECT id, project_id, name, description FROM plan WHERE project_id=$1';
     const selectTransationsByPlan = 
-        'SELECT id, plan_id, name, description, start_date, frequency FROM transaction_event WHERE plan_id=$1';
+        'SELECT id, plan_id, name, description, start_date, end_date, frequency FROM transaction_event WHERE plan_id=$1';
     const selectDeltasByTransation =
         'SELECT id, transaction_id, account_id, name, description, value FROM delta WHERE transaction_id=$1';
 
@@ -38,9 +38,10 @@ router.get('/appdata', async (req, res) => {
                         await query(selectTransationsByPlan, [plan.id])
                         .then(async transactions => {
 
-                            // node-postgres makes start_date values new Date()s, we just want a simple string
+                            // node-postgres makes date values new Date()s, we just want a simple string
                             plan.transactions = transactions.rows.map(row => {
                                 row.start_date = row.start_date.toISOString().split('T')[0];
+                                row.end_date = row.end_date && row.end_date.toISOString().split('T')[0];
                                 return row;
                             });
 

@@ -39,42 +39,54 @@ describe('Signup end-to-end functionality', () => {
     });
 
     test('Shows error message if submitting with no email', async () => {
-        await inputIntoUserForm(page, '', password);
+        await inputIntoUserForm(page, '', password, password);
         await page.keyboard.press('Enter');
         invalidMsg = await page.$eval('#email div.error', el => el.innerText);
         expect(invalidMsg).toBe(errorMsgs.email.EMAIL_MISSING);
     });
 
     test('Shows error message if submitting with invalid email', async () => {
-        await inputIntoUserForm(page, 'foo.bar@bar@bar.foo', password);
+        await inputIntoUserForm(page, 'foo.bar@bar@bar.foo', password, password);
         await page.keyboard.press('Enter');
         invalidMsg = await page.$eval('#email div.error', el => el.innerText);
         expect(invalidMsg).toBe(errorMsgs.email.EMAIL_INVALID);
     });
 
     test('Shows error message if submitting with no password', async () => {
-        await inputIntoUserForm(page, email, '');
+        await inputIntoUserForm(page, email, '', '');
         await page.keyboard.press('Enter');
         invalidMsg = await page.$eval('#password div.error', el => el.innerText);
         expect(invalidMsg).toBe(errorMsgs.password.PASSWORD_MISSING);
     });
 
     test('Shows error message if submitting with a password that is too short', async () => {
-        await inputIntoUserForm(page, email, 'E3S$');
+        await inputIntoUserForm(page, email, 'E3S$', 'E3S$');
         await page.keyboard.press('Enter');
         invalidMsg = await page.$eval('#password div.error', el => el.innerText);
         expect(invalidMsg).toBe(errorMsgs.password.PASSWORD_TOO_SHORT);
     });
 
     test('Shows error message if submitting with a password that does not meet character type requirements', async () => {
-        await inputIntoUserForm(page, email, 'yoda4prez4229');
+        await inputIntoUserForm(page, email, 'yoda4prez4229', 'yoda4prez4229');
         await page.keyboard.press('Enter');
         invalidMsg = await page.$eval('#password div.error', el => el.innerText);
         expect(invalidMsg).toBe(errorMsgs.password.PASSWORD_CHAR_REQ_FAIL);
     });
 
+    test('Shows error message if submitting with password and confirm password fields that don\'t contain the same value.', async () => {
+        await inputIntoUserForm(page, email, password, 'yoda4prez4229');
+        await page.keyboard.press('Enter');
+        await new Promise((resolve, reject) => {
+            window.setTimeout(() => {
+                resolve();
+            }, 3000);
+        });
+        invalidMsg = await page.$eval('#confirm-password div.error', el => el.innerText);
+        expect(invalidMsg).toBe(errorMsgs.password.PASSWORDS_DONT_MATCH);
+    });
+
     test('Shows modal when successful', async () => {
-        await inputIntoUserForm(page, email, password);
+        await inputIntoUserForm(page, email, password, password);
         await page.keyboard.press('Enter');
         expect(await page.waitForSelector('#signup-success-modal', { visible: true })).toBeTruthy();
     });
@@ -87,14 +99,14 @@ describe('Signup end-to-end functionality', () => {
     });
 
     test('Shows error message if submitting with an email that is unavailable', async () => {
-        await inputIntoUserForm(page, null, password);
+        await inputIntoUserForm(page, null, password, password);
         await page.click('input[type=submit]');
         invalidMsg = await page.$eval('#email div.error', el => el.innerText);
         expect(invalidMsg).toBe(errorMsgs.email.EMAIL_UNAVAILABLE);
     });
 
-    test('Put in second valid combination, shows modal', async () => {
-        await inputIntoUserForm(page, email2, password2);
+    test('Put in second valid combination, shoqws modal', async () => {
+        await inputIntoUserForm(page, email2, password2, password2);
         await page.click('input[type=submit]');
         expect(await page.waitForSelector('#signup-success-modal', { visible: true })).toBeTruthy();
     });
