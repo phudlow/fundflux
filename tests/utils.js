@@ -5,15 +5,11 @@ const _ = require('lodash');
 const sortAny = require('sort-any');
 
 function createTestUser (options = {}) {
-    if (options.login === false && options.initialData) {
-        throw new Error("Cannot set initialData without logging in.");
-    }
-
     const {
         email = `${uuid()}@testuser.com`,
         password = uuid(),
         login = true,
-        initialData = login && require('./testData').testData
+        initialData = require('./testData').testData
     } = options;
 
     // Create new instance so that users get their own session cookies
@@ -37,10 +33,23 @@ function createTestUser (options = {}) {
                 .catch(err => reject(err));
             })
         },
-        login: () => {
+        login: function () {
             return new Promise((resolve, reject) => {
                 client.post(ROOT + '/login', { body: { email, password } })
-                .then(res => resolve(res))
+                .then(res => {
+                    this.loggedIn = true;
+                    resolve(res);
+                })
+                .catch(err => reject(err));
+            });
+        },
+        logout: function () {
+            return new Promise((resolve, reject) => {
+                client.post(ROOT + '/logout')
+                .then(res => {
+                    this.loggedIn = false;
+                    resolve(res);
+                })
                 .catch(err => reject(err));
             });
         }
@@ -48,8 +57,9 @@ function createTestUser (options = {}) {
 
     return new Promise((resolve, reject) => {
         client.post(ROOT + '/signup', { body: { email, password } })
-        .then(() => login || initialData ? userObj.login()                      : Promise.resolve())
-        .then(() => initialData          ? setInitialData(userObj, initialData) : Promise.resolve())
+        .then(() => login || initialData       ? userObj.login()                      : Promise.resolve())
+        .then(() => initialData                ? setInitialData(userObj, initialData) : Promise.resolve())
+        .then(() => !login && userObj.loggedIn ? userObj.logout()                     : Promise.resolve())
         .then(() => resolve(userObj))
         .catch(err => reject(err));
     });

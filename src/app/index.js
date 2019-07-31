@@ -8,11 +8,14 @@ class App extends Component {
         super(props);
     }
     componentDidMount() {
-        fetch('/appdata')
+        fetch('/appdata', {
+
+        })
         .then(res => {
             return res.json();
         })
-        .then(res => console.log(res));
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
     }
     render() {
         return (

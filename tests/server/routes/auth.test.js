@@ -10,7 +10,7 @@ let res, testUser, email, password;
 
 describe('Authentication', () => {
     beforeAll(async () => {
-        testUser = await require('../../utils').createTestUser({ login: false });
+        testUser = await require('../../utils').createTestUser({ login: false, initialData: false });
         email    = testUser.email;
         password = testUser.password;
     });
@@ -43,25 +43,37 @@ describe('Authentication', () => {
     });
 
     test('going to /login while logged-in redirects to home', async () => {
-        const res = await rp.get(ROOT + '/login');
+        res = await rp.get(ROOT + '/login');
         expect(res.req.path).toBe('/')
         expect(res.statusCode).toBe(200);
     });
 
     test('can logout, redirects to login', async () => {
-        const res = await rp.get(ROOT + '/logout');
+        res = await rp.get(ROOT + '/logout');
         expect(res.req.path).toBe('/login?fromLogout=true');
         expect(res.statusCode).toBe(200);
     });
 
     test('going to logout when logged-out redirects to login', async () => {
-        const res = await rp.get(ROOT + '/logout');
+        res = await rp.get(ROOT + '/logout');
         expect(res.req.path).toBe('/login');
         expect(res.statusCode).toBe(200);
     });
 
     test('going to home when logged-out redirects to login', async () => {
-        const res = await rp.get(ROOT + '/');
+        res = await rp.get(ROOT + '/');
+        expect(res.req.path).toBe('/login');
+        expect(res.statusCode).toBe(200);
+    });
+
+    test('can log out via post', async () => {
+        res = await rp.post(ROOT + '/login', { body: { email, password } });
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBe('LOGIN_SUCCESSFUL');
+        expect(res.body.error).toBeFalsy();
+        res = await rp.post(ROOT + '/logout');
+        expect(res.statusCode).toBe(200);
+        res = await rp.get(ROOT + '/');
         expect(res.req.path).toBe('/login');
         expect(res.statusCode).toBe(200);
     });

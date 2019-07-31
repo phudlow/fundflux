@@ -10,10 +10,10 @@ describe('Login end-to-end functionality', () => {
             executablePath: process.env.CHROME_PATH
         });
         page = (await browser.pages())[0];
-        testUser = await createTestUser({ login: false });
+        testUser = await createTestUser({ login: false, initialData: false });
         email    = testUser.email;
         password = testUser.password;
-        testUser2 = await createTestUser({ login: false });
+        testUser2 = await createTestUser({ login: false, initialData: false });
     });
 
     afterAll(async () => {

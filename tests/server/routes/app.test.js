@@ -14,7 +14,7 @@ describe('API endpoints for app', () => {
     beforeAll(async () => {
         testUser =  await createTestUser({ initialData: testData });
         testUser2 = await createTestUser({ initialData: testData2 });
-    }, 15000);
+    }, 20000);
 
     afterAll(async () => {
         await testUser.remove();

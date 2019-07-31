@@ -33,6 +33,12 @@ router.get('/logout', function(req, res) {
     }
     res.redirect('/login');
 });
+router.post('/logout', function(req, res) {
+    if (req.isAuthenticated()) {
+        req.logout();
+    }
+    res.sendStatus(200);
+});
 
 // All routes declared after this require authentication
 router.use((req, res, next) => {
