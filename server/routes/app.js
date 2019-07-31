@@ -15,7 +15,7 @@ router.get('/appdata', async (req, res) => {
     const selectTransationsByPlan = 
         'SELECT id, plan_id, name, description, start_date, end_date, frequency FROM transaction_event WHERE plan_id=$1';
     const selectDeltasByTransation =
-        'SELECT id, transaction_id, account_id, name, description, value FROM delta WHERE transaction_id=$1';
+        'SELECT id, transaction_id, account_id, from_account_id, name, description, value, formula FROM delta WHERE transaction_id=$1';
 
     // Fetch all project data
     const projects = (await query(selectProjectsByUserId, [req.user.id])).rows;

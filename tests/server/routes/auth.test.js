@@ -10,7 +10,7 @@ let res, testUser, email, password;
 
 describe('Authentication', () => {
     beforeAll(async () => {
-        testUser = await require('../../utils').createTestUser();
+        testUser = await require('../../utils').createTestUser({ login: false });
         email    = testUser.email;
         password = testUser.password;
     });

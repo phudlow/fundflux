@@ -47,20 +47,24 @@ CREATE TABLE transaction_event (
     description     varchar(1000),
     frequency       varchar(15)     NOT NULL,
     start_date      date            NOT NULL,
-    end_date      date,
+    end_date        date
 );
 
 -- A flux of fund
 CREATE TABLE delta (
     id              serial          PRIMARY KEY,
     transaction_id  int             NOT NULL REFERENCES transaction_event(id) ON DELETE CASCADE,
-    account_id      int             NOT NULL REFERENCES account(id), -- ON DELETE CASCADE,
+    account_id      int             REFERENCES account(id) ON DELETE SET NULL,
+    from_account_id int             REFERENCES account(id) ON DELETE SET NULL,
     name            varchar(50),
     description     varchar(1000),
-    value           numeric(15, 2)  NOT NULL
+    value           numeric(15, 2),
+    formula         varchar(50),
+    constraint amount_exists check (value IS NOT NULL OR formula IS NOT NULL)
 );
 
 -- The backend application db user
 CREATE ROLE fundflux_app WITH LOGIN PASSWORD :pw;
+GRANT USAGE ON SCHEMA public TO fundflux_app;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO fundflux_app;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO fundflux_app;

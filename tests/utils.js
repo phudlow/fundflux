@@ -5,11 +5,15 @@ const _ = require('lodash');
 const sortAny = require('sort-any');
 
 function createTestUser (options = {}) {
+    if (options.login === false && options.initialData) {
+        throw new Error("Cannot set initialData without logging in.");
+    }
+
     const {
         email = `${uuid()}@testuser.com`,
         password = uuid(),
         login = true,
-        initialData = require('./testData').testData
+        initialData = login && require('./testData').testData
     } = options;
 
     // Create new instance so that users get their own session cookies
@@ -44,9 +48,9 @@ function createTestUser (options = {}) {
 
     return new Promise((resolve, reject) => {
         client.post(ROOT + '/signup', { body: { email, password } })
-        .then(() => login       ? userObj.login()                      : Promise.resolve())
-        .then(() => initialData ? setInitialData(userObj, initialData) : Promise.resolve())
-        .then(res => resolve(userObj))
+        .then(() => login || initialData ? userObj.login()                      : Promise.resolve())
+        .then(() => initialData          ? setInitialData(userObj, initialData) : Promise.resolve())
+        .then(() => resolve(userObj))
         .catch(err => reject(err));
     });
 }
@@ -122,10 +126,10 @@ function setInitialData(user, data) {
                         // Set id on account
                         account.id = resBody.data.id;
 
-                        // Delete the accountName value of each delta within the transactions in this plan,
-                        // then put the id of the account with that name on account_id of that delta.
-                        // accountName is not a normal field on this data and is used here to reference
-                        // an account whose id cannot be known until now, when it's created.
+                        // Delete the accountName/fromAccountName value of each delta within the transactions in
+                        // this plan, then put the id of the account with that name on account_id of that delta.
+                        // accountName and fromAccountName is not a normal field on this data and is used here
+                        // to reference an account whose id cannot be known until now, when it's created.
                         // For the sake of testing, account table names are unique in the test data.
                         project.plans.forEach(plan => {
                             plan.transactions.forEach(transaction => {
@@ -133,6 +137,10 @@ function setInitialData(user, data) {
                                     if (delta.accountName === resBody.data.name) {
                                         delete delta.accountName;
                                         delta.account_id = resBody.data.id;
+                                    }
+                                    if (delta.fromAccountName === resBody.data.name) {
+                                        delete delta.fromAccountName;
+                                        delta.from_account_id = resBody.data.id;
                                     }
                                 });
                             });
@@ -177,7 +185,9 @@ function setInitialData(user, data) {
                                         body: {
                                             transaction_id: delta.transaction_id,
                                             account_id: delta.account_id,
+                                            from_account_id: delta.from_account_id,
                                             value: delta.value,
+                                            formula: delta.formula,
                                             name: delta.name,
                                             description: delta.description
                                         }
