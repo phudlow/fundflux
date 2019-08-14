@@ -1,0 +1,1 @@
+export const RECEIVED_APPDATA = 'RECEIVED_APPDATA';
