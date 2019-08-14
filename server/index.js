@@ -31,5 +31,10 @@ app.use(require('./routes/account'));
 app.use(require('./routes/transaction'));
 app.use(require('./routes/delta'));
 
+// Error handler
+app.use(function (err, req, res, next) {
+    res.sendStatus(500);
+});
+
 // Start server
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`));

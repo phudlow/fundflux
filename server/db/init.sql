@@ -11,7 +11,7 @@ CREATE TABLE app_user (
 CREATE TABLE session (
     sid         varchar         PRIMARY KEY,
     sess        json            NOT NULL,
-	expire      timestamp(6)    NOT NULL
+    expire      timestamp(6)    NOT NULL
 );
 
 -- Outer most encapsulator
