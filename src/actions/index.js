@@ -64,6 +64,13 @@ function normalizeAppData(data) {
             }
         }
     }
+
+    // Parse transactions start_date and end_date to Date instances
+    Object.values(result.transactions.byId).forEach(transaction => {
+        transaction.start_date = transaction.start_date && new Date(transaction.start_date);
+        transaction.end_date = transaction.end_date && new Date(transaction.end_date);
+    });
+
     return result;
 }
 

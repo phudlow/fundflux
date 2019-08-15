@@ -151,7 +151,7 @@ const testData = {
                         {
                             name: "Expenses",
                             description: "Expenses for the month",
-                            start_date: "2010-05-15",
+                            start_date: "2017-05-15",
                             end_date: "2020-05-15",
                             frequency: "monthly",
                             deltas: [
@@ -168,7 +168,7 @@ const testData = {
                         {
                             name: "Salary",
                             description: "Income from job",
-                            start_date: "2000-01-01",
+                            start_date: "2017-01-01",
                             end_date: null,
                             frequency: "biweekly",
                             deltas: [

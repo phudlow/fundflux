@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchAppData } from '../actions';
+import Graph from './Graph';
 
 class App extends Component {
     constructor(props) {
@@ -19,6 +20,8 @@ class App extends Component {
             <div id="app-page">
                 App
                 <a href="/logout">Logout</a>
+                <br/><br/>
+                <Graph planId={209} />
             </div>
         )
     }
