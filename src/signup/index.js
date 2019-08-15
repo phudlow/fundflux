@@ -124,44 +124,42 @@ class Signup extends UserForm {
     render() {
         return (
             <div id="signup-page">
-                <div>{SIGN_UP}</div>
+                <nav>
+                    <div>FundFlux</div>
+                    <div>
+                        <a href="/login">Login</a>
+                    </div>
+                </nav>
                 <form onSubmit={this.handleSubmit}>
-                    <div className="title">{this.headerText}</div>
-                    <div id="email">
-                        <label>
-                            <input name="email" type="text" placeholder="Email"
-                                value={this.state.email}
-                                onChange={this.handleChange}
-                                onBlur={this.validateInput}
-                                disabled={this.state.processingRequest}
-                            />
-                            <div className="error">{this.state.invalidMsg.email}</div>
-                        </label>
+                    <h1>{this.props.title}</h1>
+                    <input name="email" type="text" placeholder="Email"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                        onBlur={this.validateInput}
+                        disabled={this.state.processingRequest}
+                    />
+                    <div className="error">{this.state.invalidMsg.email}</div>
+                    <input name="password" type="password" placeholder="Password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                        onBlur={this.validateInput}
+                        disabled={this.state.processingRequest}
+                    />
+                    <div className="error">{this.state.invalidMsg.password}</div>
+                    <input name="confirmPassword" type="password" placeholder="Confirm Password"
+                        value={this.state.confirmPassword}
+                        onChange={this.handleChange}
+                        onBlur={this.validateInput}
+                        disabled={this.state.processingRequest}
+                    />
+                    <div className="error">{this.state.invalidMsg.confirmPassword}</div>
+                    <div>
+                        <input type="submit" disabled={this.state.processingRequest} />
+                        <span>
+                            <a href="/login">Back to login</a>
+                        </span>
                     </div>
-                    <div id="password">
-                        <label>
-                            <input name="password" type="password" placeholder="Password"
-                                value={this.state.password}
-                                onChange={this.handleChange}
-                                onBlur={this.validateInput}
-                                disabled={this.state.processingRequest}
-                            />
-                            <div className="error">{this.state.invalidMsg.password}</div>
-                        </label>
-                    </div>
-                    <div id="confirm-password">
-                            <label>
-                                <input name="confirmPassword" type="password" placeholder="Confirm Password"
-                                    value={this.state.confirmPassword}
-                                    onChange={this.handleChange}
-                                    onBlur={this.validateInput}
-                                    disabled={this.state.processingRequest}
-                                />
-                                <div className="error">{this.state.invalidMsg.confirmPassword}</div>
-                            </label>
-                        </div>
-                    <input type="submit" disabled={this.state.processingRequest} />
-                </form>q
+                </form>
                 <SuccessModal
                     email={this.state.email}
                     visible={this.state.accountCreated}
@@ -173,4 +171,4 @@ class Signup extends UserForm {
     }
 }
 
-ReactDOM.render(<Signup />, document.getElementById('root'));
+ReactDOM.render(<Signup title={SIGN_UP} />, document.getElementById('root'));

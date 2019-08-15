@@ -57,31 +57,29 @@ class UserForm extends Component {
     }
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <div className="title">{this.headerText}</div>
-                <div id="email">
-                    <label>
-                        <input name="email" type="text" placeholder="Email"
-                            value={this.state.email}
-                            onChange={this.handleChange}
-                            onBlur={this.validateInput}
-                            disabled={this.state.processingRequest}
-                        />
-                        <div className="error">{this.state.invalidMsg.email}</div>
-                    </label>
+            <form className="userform" onSubmit={this.handleSubmit}>
+                <h1>{this.props.title}</h1>
+                <input name="email" type="text" placeholder="Email"
+                    value={this.state.email}
+                    onChange={this.handleChange}
+                    onBlur={this.validateInput}
+                    disabled={this.state.processingRequest}
+                />
+                <div className="error">{this.state.invalidMsg.email}</div>
+                <input name="password" type="password" placeholder="Password"
+                    value={this.state.password}
+                    onChange={this.handleChange}
+                    onBlur={this.validateInput}
+                    disabled={this.state.processingRequest}
+                />
+                <div className="error">{this.state.invalidMsg.password}</div>
+                <div>
+                    <input type="submit" disabled={this.state.processingRequest} />
+                    <span>
+                        Don't have an account? Sign up&nbsp;
+                        <a href="/signup">here</a>.
+                    </span>
                 </div>
-                <div id="password">
-                    <label>
-                        <input name="password" type="password" placeholder="Password"
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            onBlur={this.validateInput}
-                            disabled={this.state.processingRequest}
-                        />
-                        <div className="error">{this.state.invalidMsg.password}</div>
-                    </label>
-                </div>
-                <input type="submit" disabled={this.state.processingRequest} />
             </form>
         );
     }

@@ -1,27 +1,71 @@
+
+/* Variables */
+$pill-padding: 0.5em 1em;
+$input-padding: 0.5em;
+
+/* Global */
+* { box-sizing: border-box; }
+
 body {
     margin: 0;
     font-family: 'helvetica';
 }
+
+#root>* {
+    padding-top: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+button, input[type=button], input[type=submit] {
+    &:hover {
+        cursor: pointer;
+    }
+    border: none;
+    background-color: teal;
+    padding: $pill-padding;
+    border-radius: 1em;
+    color: white;
+}
+input[type=text], input[type=password] {
+    background-color: white;
+    border: 1px solid #999;
+    padding: $input-padding;
+}
+
 form {
     display: inline-block;
-    .title {
-        text-align: center;
+    background-color: white;
+    padding: 1em;
+    input {
+        &[type=text], &[type=password] {
+            margin-top: 0.4em;
+            width: 100%;
+        }
+        font-size: 1.2em;
     }
-    input[type=submit] {
-        width: 100%;
+    width: 600px;
+    >div:last-child {
+        margin-top: 0.2em;
+        display: flex;
+        justify-content: space-between;
+        span {
+            text-align: right;
+            padding-top: 0.5em;
+        }
     }
 }
 .error {
     height: 1.2em;
-    font-size: 0.75em;
     color: red;
+    text-align: left;
 }
 #signup-success-modal {
     display: inline-block;
     text-align: center;
     border: 1px solid black;
     background-color: beige;
-    position: relative;
+    position: fixed;
     opacity: 0;
     visibility: hidden;
     &.visible {
@@ -41,4 +85,22 @@ form {
 @keyframes modal-appear {
     from { opacity: 0; top: 1em; }
     to   { opacity: 1; top: 2em; }
+}
+
+nav {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    top: 0; 
+    font-size: 1.2em;
+    padding: 0.5em;
+    background-color: rgb(40, 145, 145);
+    width: 100vw;
+    color: white;
+    a { 
+        text-decoration: none;
+        &:visited {
+            color: white;
+        }
+    }
 }

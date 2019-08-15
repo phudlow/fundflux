@@ -61,11 +61,16 @@ class Login extends UserForm {
     render() {
         return (
             <div id="login-page">
-                <div>{LOGIN}</div>
+                <nav>
+                    <div>FundFlux</div>
+                    <div>
+                        <a href="/signup">Signup</a>
+                    </div>
+                </nav>
                 {super.render()}
             </div>
         )
     }
 }
 
-ReactDOM.render(<Login />, document.getElementById('root'));
+ReactDOM.render(<Login title={LOGIN} />, document.getElementById('root'));
