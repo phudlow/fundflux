@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 
-import '../common.scss';
+import UserForm from './UserForm';
+import SignupSuccessModal from '../modals/SignupSuccessModal';
 
-import UserForm from '../shared/UserForm';
-import SuccessModal from './SuccessModal';
-
-import { userForm } from '../../locale/en-us';
+import { userForm } from '../../../locale/en-us';
 const { errorMsgs, successModalText, SIGN_UP } = userForm;
 
 class Signup extends UserForm {
@@ -24,7 +21,10 @@ class Signup extends UserForm {
             },
             processingRequest: false,
             accountCreated: false
+            // accountCreated: true
         }
+
+        this.title = SIGN_UP;
 
         this.passwordCharRegexes = {
             lowerCase: /[a-z]/,
@@ -77,7 +77,7 @@ class Signup extends UserForm {
 
         await this.validateInput(null);
 
-        if (this.state.invalidMsg.email || this.state.invalidMsg.password) {
+        if (this.state.invalidMsg.email || this.state.invalidMsg.password || this.state.invalidMsg.confirmPassword) {
             return;
         }
 
@@ -131,7 +131,7 @@ class Signup extends UserForm {
                     </div>
                 </nav>
                 <form onSubmit={this.handleSubmit}>
-                    <h1>{this.props.title}</h1>
+                    <h1>{this.title}</h1>
                     <input name="email" type="text" placeholder="Email"
                         value={this.state.email}
                         onChange={this.handleChange}
@@ -160,7 +160,7 @@ class Signup extends UserForm {
                         </span>
                     </div>
                 </form>
-                <SuccessModal
+                <SignupSuccessModal
                     email={this.state.email}
                     visible={this.state.accountCreated}
                     onClose={this.handleCloseSuccessModal}
@@ -171,4 +171,4 @@ class Signup extends UserForm {
     }
 }
 
-ReactDOM.render(<Signup title={SIGN_UP} />, document.getElementById('root'));
+export default Signup;

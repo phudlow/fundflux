@@ -3,20 +3,20 @@
 $pill-padding: 0.5em 1em;
 $input-padding: 0.5em;
 
-/* Global */
+/* Global / Top Level */
 * { box-sizing: border-box; }
-
 body {
     margin: 0;
     font-family: 'helvetica';
 }
-
 #root>* {
     padding-top: 10vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
+/* Text Inputs */
 button, input[type=button], input[type=submit] {
     &:hover {
         cursor: pointer;
@@ -27,12 +27,15 @@ button, input[type=button], input[type=submit] {
     border-radius: 1em;
     color: white;
 }
+
+/* Buttons */
 input[type=text], input[type=password] {
     background-color: white;
     border: 1px solid #999;
     padding: $input-padding;
 }
 
+/* Forms */
 form {
     display: inline-block;
     background-color: white;
@@ -46,12 +49,12 @@ form {
     }
     width: 600px;
     >div:last-child {
-        margin-top: 0.2em;
+        margin-top: 0.4em;
         display: flex;
         justify-content: space-between;
         span {
             text-align: right;
-            padding-top: 0.5em;
+            padding-top: 0.2em;
         }
     }
 }
@@ -60,21 +63,57 @@ form {
     color: red;
     text-align: left;
 }
-#signup-success-modal {
-    display: inline-block;
-    text-align: center;
-    border: 1px solid black;
-    background-color: beige;
+
+/* Modal */
+@mixin modal-animation {
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+  }
+@keyframes appear {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes shift-vertically {
+    from { top: 1em; }
+    to   { top: 2em; }
+}
+.modal-container {
     position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0,0,0,0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     opacity: 0;
     visibility: hidden;
+
     &.visible {
         visibility: visible;
-        animation-duration: 0.2s;
-        animation-name: modal-appear;
-        animation-fill-mode: forwards;
-        animation-timing-function: linear;
+        animation-name: appear;
+        @include modal-animation;
+
+        .modal {
+            animation-name: shift-vertically;
+            @include modal-animation;
+        }
     }
+
+    .modal {
+        display: inline-block;
+        text-align: center;
+        border: 1px solid black;
+        padding: 1em;
+        margin-top: -20vh;
+        position: relative;
+        background-color: white;
+    }
+
     .close-btn {
         cursor: pointer;
         position: absolute;
@@ -82,18 +121,15 @@ form {
         right: 0.5em;
     }
 }
-@keyframes modal-appear {
-    from { opacity: 0; top: 1em; }
-    to   { opacity: 1; top: 2em; }
-}
 
+/* Navigation bar */
 nav {
     position: fixed;
     display: flex;
     justify-content: space-between;
     top: 0; 
     font-size: 1.2em;
-    padding: 0.5em;
+    padding: 0.7em;
     background-color: rgb(40, 145, 145);
     width: 100vw;
     color: white;

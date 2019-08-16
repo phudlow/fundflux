@@ -1,4 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from 'Redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducers from '../reducers';
 
@@ -6,8 +6,9 @@ const initialState = {
     fetchedAppData: false
 }
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const middleware = composeEnhancers(applyMiddleware(thunk));
+// To enable redux devtools
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || window.compose;
+const middleware = composeEnhancers ? composeEnhancers(applyMiddleware(thunk)) : applyMiddleware(thunk);
 
 const store = createStore(reducers, initialState, middleware);
 

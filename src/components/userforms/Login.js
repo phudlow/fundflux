@@ -1,11 +1,8 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 
-import '../common.scss';
+import UserForm from './UserForm';
 
-import UserForm from '../shared/UserForm';
-
-import { userForm } from '../../locale/en-us';
+import { userForm } from '../../../locale/en-us';
 const { errorMsgs, LOGIN } = userForm;
 
 class Login extends UserForm {
@@ -21,6 +18,8 @@ class Login extends UserForm {
             },
             processingRequest: false
         };
+
+        this.title = LOGIN;
 
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -73,4 +72,4 @@ class Login extends UserForm {
     }
 }
 
-ReactDOM.render(<Login title={LOGIN} />, document.getElementById('root'));
+export default Login;

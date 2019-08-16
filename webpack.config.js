@@ -11,9 +11,9 @@ const HTMLWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin
 
 const common = {
     entry: {
-        login: path.resolve(__dirname, 'src/login'),
-        signup: path.resolve(__dirname, 'src/signup'),
-        app: path.resolve(__dirname, 'src/app')
+        login: path.resolve(__dirname, 'src/entrypoints/login'),
+        signup: path.resolve(__dirname, 'src/entrypoints/signup'),
+        app: path.resolve(__dirname, 'src/entrypoints/app')
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -64,7 +64,7 @@ const development = {
     devServer: {},
     module: {
         rules: [
-            { test: /\.scss$/, use: [
+            { test: /\.(scss|css)$/, use: [
                 { loader: 'style-loader',  options: { sourceMap: true } },
                 { loader: 'css-loader',  options: { sourceMap: true } },
                 { loader: 'sass-loader', options: { sourceMap: true } }
@@ -79,7 +79,7 @@ const development = {
 const production = {
     module: {
         rules: [
-            { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] }
+            { test: /\.(scss|css)$/, use: ['style-loader', 'css-loader', 'sass-loader'] }
         ]
     }
 };

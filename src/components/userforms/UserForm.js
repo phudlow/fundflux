@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { userForm } from '../../locale/en-us';
+import { userForm } from '../../../locale/en-us';
 const { errorMsgs } = userForm;
 
 class UserForm extends Component {
@@ -58,7 +58,7 @@ class UserForm extends Component {
     render() {
         return (
             <form className="userform" onSubmit={this.handleSubmit}>
-                <h1>{this.props.title}</h1>
+                <h1>{this.title}</h1>
                 <input name="email" type="text" placeholder="Email"
                     value={this.state.email}
                     onChange={this.handleChange}
@@ -76,8 +76,8 @@ class UserForm extends Component {
                 <div>
                     <input type="submit" disabled={this.state.processingRequest} />
                     <span>
-                        Don't have an account? Sign up&nbsp;
-                        <a href="/signup">here</a>.
+                        <span style={{display: 'inline-block'}}>Don't have an account?</span>
+                        <span style={{display: 'inline-block'}}>&nbsp;Sign up&nbsp;<a href="/signup">here</a>.</span>
                     </span>
                 </div>
             </form>
