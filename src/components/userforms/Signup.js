@@ -4,7 +4,7 @@ import UserForm from './UserForm';
 import SignupSuccessModal from '../modals/SignupSuccessModal';
 
 import { userForm } from '../../../locale/en-us';
-const { errorMsgs, successModalText, SIGN_UP } = userForm;
+const { errorMsgs, SIGN_UP } = userForm;
 
 class Signup extends UserForm {
     constructor(props) {
@@ -21,7 +21,6 @@ class Signup extends UserForm {
             },
             processingRequest: false,
             accountCreated: false
-            // accountCreated: true
         }
 
         this.title = SIGN_UP;
@@ -164,7 +163,6 @@ class Signup extends UserForm {
                     email={this.state.email}
                     visible={this.state.accountCreated}
                     onClose={this.handleCloseSuccessModal}
-                    successModalText={successModalText}
                 />
             </div>
         );

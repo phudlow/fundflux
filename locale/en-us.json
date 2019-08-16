@@ -15,11 +15,12 @@
                 "PASSWORDS_DONT_MATCH": "Passwords do not match."
             },
             "INVALID_CREDENTIALS": "Invalid credentials"
-        },
-        "successModalText": {
-            "SUCCESS": "Success! Your account has been created.",
-            "CHECK_EMAIL": "Please check your email to verify your account before logging in.",
-            "RETURN_TO_LOGIN": "Return to Login"
         }
+    },
+    "signupSuccessModalText": {
+        "SUCCESS": "Success!",
+        "ACCOUNT_CREATED": "Your account has been created.",
+        "CHECK_EMAIL": "Please check your email to verify your account before logging in.",
+        "RETURN_TO_LOGIN": "Return to Login"
     }
 }
