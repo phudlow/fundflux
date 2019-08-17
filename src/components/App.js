@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchAppData } from '../actions';
+
+import Nav from './Nav';
 import Graph from './charts/Graph';
+import ProjectsTable from './tables/ProjectsTable';
 
 class App extends Component {
     constructor(props) {
@@ -18,10 +21,13 @@ class App extends Component {
         }
         return (
             <div id="app-page">
-                App
-                <a href="/logout">Logout</a>
-                <br/><br/>
+                <Nav />
+                {/* App<a href="/logout">Logout</a> */}
                 {/* <Graph planId={209} /> */}
+                <ProjectsTable
+                    checkboxes={true}
+                />
+                <br/><br/>
             </div>
         )
     }
@@ -29,7 +35,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
     const { fetchedAppData } = state;
-    return { fetchedAppData };
+    return { fetchedAppData, projects: state.projects };
 }
 
 export default connect(mapStateToProps, { fetchAppData })(App);

@@ -1,6 +1,7 @@
 
 /* Variables */
 $primary-color: teal;
+$nav-height: 3em;
 
 /* Global / Top Level */
 * { box-sizing: border-box; }
@@ -11,18 +12,21 @@ body {
     a { font-size: 1em; }
 }
 #root>* {
-    padding-top: 10vh;
+    padding-top: $nav-height;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 /* Buttons */
-button, .button, input[type=button], input[type=submit] {
+@mixin btn-hover-animation {
     &:hover {
         background-color: darken($primary-color, 5%);
     }
-    transition: all 0.2s;
+    transition: background-color 0.2s;
+}
+button, .button, input[type=button], input[type=submit] {
+    @include btn-hover-animation;
     cursor: pointer;
     display: inline-block;
     border: none;
@@ -136,13 +140,58 @@ nav {
     background-color: rgb(40, 145, 145);
     width: 100vw;
     color: white;
-    & > * {
-        padding: 0.7em;
+    & > div:first-child, & > div:last-child > * {
+        height: $nav-height;
+        padding: 0 1em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        &.clickable {
+            cursor: pointer;
+            @include btn-hover-animation;
+        }
     }
     a { 
         text-decoration: none;
         &:visited {
             color: white;
+        }
+    }
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    tr {
+        border-top: 1px solid #888;
+        &:last-child { border-bottom: 1px solid #888; }
+    }
+    tbody tr:hover {
+        background-color: #ddd;
+    }
+    td, th {
+        padding: 0.5em;
+    }
+}
+
+/* Checkbox */
+.checkbox {
+    position: relative;
+    height: 1em;
+    width: 1em;
+    svg {
+        position: absolute;
+        &:first-child {
+            top: 0;
+            left: 0;
+            color: #777
+        }
+        &:last-child {
+            top: -0.1em;
+            left: 0.1em;
+            color: green
         }
     }
 }
