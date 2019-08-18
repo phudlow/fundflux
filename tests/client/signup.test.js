@@ -105,14 +105,14 @@ describe('Signup end-to-end functionality', () => {
         expect(invalidMsg).toBe(errorMsgs.email.EMAIL_UNAVAILABLE);
     });
 
-    test('Put in second valid combination, shoqws modal', async () => {
+    test('Put in second valid combination, shows modal', async () => {
         await inputIntoUserForm(page, email2, password2, password2);
         await page.click('input[type=submit]');
         expect(await page.waitForSelector('.modal', { visible: true })).toBeTruthy();
     });
 
     test('Clicking link in modal returns to login page', async () => {
-        await page.click('.modal a');
+        await page.click('.modal .button');
         expect(await page.waitForSelector('#login-page')).toBeTruthy();
         expect(page.url().includes('/login')).toBeTruthy();
     });

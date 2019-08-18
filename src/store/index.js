@@ -3,8 +3,13 @@ import thunk from 'redux-thunk';
 import reducers from '../reducers';
 
 const initialState = {
-    fetchedAppData: false
-}
+    fetchedAppData: false,
+    email: null,
+    currentProjectId: null,
+    ui: {
+        selectingProject: true
+    }
+};
 
 // To enable redux devtools
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || window.compose;

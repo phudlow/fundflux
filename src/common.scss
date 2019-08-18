@@ -3,6 +3,13 @@
 $primary-color: teal;
 $nav-height: 3em;
 
+/* Utility Classes */
+.split {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 /* Global / Top Level */
 * { box-sizing: border-box; }
 body {
@@ -17,6 +24,10 @@ body {
     align-items: center;
     justify-content: center;
 }
+main {
+    width: 980px;
+    margin: 0.5em;
+}
 
 /* Buttons */
 @mixin btn-hover-animation {
@@ -29,6 +40,7 @@ button, .button, input[type=button], input[type=submit] {
     @include btn-hover-animation;
     cursor: pointer;
     display: inline-block;
+    height: 2em;
     border: none;
     background-color: teal;
     padding: 0.5em 1em;
@@ -140,13 +152,16 @@ nav {
     background-color: rgb(40, 145, 145);
     width: 100vw;
     color: white;
-    & > div:first-child, & > div:last-child > * {
+    & > div:first-child, & > div:last-child > *:not(.menu) {
         height: $nav-height;
         padding: 0 1em;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         &.clickable {
+            & > *:not(:last-child) {
+                margin-right: 1em;
+            }
             cursor: pointer;
             @include btn-hover-animation;
         }
@@ -159,21 +174,56 @@ nav {
     }
 }
 
+/* Menus */
+.menu {
+    display: block;
+    position: absolute;
+    background-color: white;
+    color: black;
+    top: 3em;
+    right: 0;
+    border: 1px solid #888;
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
+    > div {
+        display: block;
+        &:hover {
+            background-color: #ccc;
+            cursor: pointer;
+        }
+        padding: 0.5em 1em;
+    }
+}
+
 /* Tables */
 table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
+    thead {
+        font-weight: bold;
+    }
     tr {
-        border-top: 1px solid #888;
-        &:last-child { border-bottom: 1px solid #888; }
+        border-bottom: 1px solid #888;
+        border-left: 1px solid white;
+        border-right: 1px solid white;
     }
     tbody tr:hover {
-        background-color: #ddd;
+        cursor: default;
+        border-left: 1px solid #888;
+        border-right: 1px solid #888;
+        -webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
+        box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
     }
     td, th {
         padding: 0.5em;
     }
+}
+div.no-data {
+    border-top: 1px solid #888;
+    text-align: center;
 }
 
 /* Checkbox */

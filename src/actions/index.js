@@ -1,4 +1,4 @@
-import { RECEIVED_APPDATA } from '../constants';
+import { RECEIVED_APPDATA, SELECTING_PROJECT, SELECTED_PROJECT } from '../constants';
 
 // Follow Redux convention for normalized stores
 function normalizeAppData(data) {
@@ -81,14 +81,31 @@ function recievedAppData(data) {
     }
 }
 
+export const selectedProject = projectId => {
+    return {
+        type: SELECTED_PROJECT,
+        payload: projectId
+    }
+};
+
+export const selectingProject = () => {
+    return {
+        type: SELECTING_PROJECT
+    }
+};
+
 // "Thunk" to fetch all appdata 
-export const fetchAppData = () => {
-    return (dispatch) => {
+export const fetchAppData = dispatch => {
+    return () => {
         return fetch('/appdata')
         .then(
             res => res.json(),
             err => console.log('An error occurred: ', err)
         )
-        .then(res => dispatch(recievedAppData(normalizeAppData(res.data))));
+        .then(res => {
+            const data = normalizeAppData(res.data);
+            data.email = res.email;
+            dispatch(recievedAppData(data));
+        });
     }
 }

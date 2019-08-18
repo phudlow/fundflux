@@ -1,21 +1,38 @@
 import React, { Component } from 'React';
+import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Nav extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            userMenuOpen: false
+        };
+
+        this.toggleUserMenuOpen = this.toggleUserMenuOpen.bind(this);
+    }
+    toggleUserMenuOpen() {
+        this.setState({
+            userMenuOpen: !this.state.userMenuOpen
+        });
     }
     render() {
-        // Use solid icon when user menu is open
-        // const userIconType = this.props.userMenuOpen ? 'fas' : 'far';
-        const userIconType = 'fas';
+        const userIconType = this.state.userMenuOpen ? 'fas' : 'far';
+        const userMenuVisibility = this.state.userMenuOpen ? 'visible' : 'hidden';
 
         return (
             <nav>
                 <div>FundFlux</div>
-                <div>
-                    <div className="clickable">
+                <div id='user-menu'>
+                    <div className='clickable' onClick={this.toggleUserMenuOpen}>
+                        <span>{this.props.email}</span>
                         <FontAwesomeIcon icon={[userIconType, 'user']} />
+                    </div>
+                    <div className="menu" style={{visibility: userMenuVisibility}}>
+                        <div id='logout' onClick={() => window.location.href = '/logout'}>Logout</div>
+                        {/* <div>Change Password</div> */}
+                        {/* <div>Delete Account</div> */}
                     </div>
                 </div>
             </nav>
@@ -23,4 +40,10 @@ class Nav extends Component {
     }
 }
 
-export default Nav;
+const mapStateToProps = state => {
+    return {
+        email: state.email
+    };
+};
+
+export default connect(mapStateToProps)(Nav);

@@ -71,7 +71,9 @@ describe('Login end-to-end functionality', () => {
     });
 
     test('Can logout, redirects to login', async () => {
-        await page.click('a[href="/logout"]');
+        await page.click('#user-menu');
+        await page.waitForSelector('#user-menu .menu');
+        await page.click('#user-menu .menu #logout');
         expect(await page.waitForSelector('#login-page')).toBeTruthy();
         expect(page.url().includes('/login')).toBeTruthy();
     });

@@ -20,8 +20,7 @@ class Signup extends UserForm {
                 confirmPassword: undefined
             },
             processingRequest: false,
-            // accountCreated: false
-            accountCreated: true
+            accountCreated: false
         }
 
         this.title = SIGN_UP;

@@ -6,7 +6,7 @@ const { createTestUser, sortDeep } = require('../../utils');
 const ROOT = process.env.SERVER_ROOT;
 
 // Describe testUser's data
-const { testData, testData2 } = require('../../testData');
+let { testData, testData2 } = require('../../testData');
 
 let testUser, testUser2;
 describe('API endpoints for app', () => {
@@ -14,6 +14,9 @@ describe('API endpoints for app', () => {
     beforeAll(async () => {
         testUser =  await createTestUser({ initialData: testData });
         testUser2 = await createTestUser({ initialData: testData2 });
+
+        testData = { data: testData, email: testUser.email };
+        testData2 = { data: testData2, email: testUser2.email };
     }, 20000);
 
     afterAll(async () => {
@@ -27,83 +30,83 @@ describe('API endpoints for app', () => {
             testUser2.get(ROOT + '/appdata')
         ]);
         expect(results.map(res => sortDeep(res))).toEqual([
-            { data: sortDeep(testData) },
-            { data: sortDeep(testData2) }
+            sortDeep(testData),
+            sortDeep(testData2)
         ]);
     });
 
     test('Can delete delta', async () => {
-        const delta = testData.projects[1].plans[1].transactions[1].deltas[1];
+        const delta = testData.data.projects[1].plans[1].transactions[1].deltas[1];
         await testUser.delete(ROOT + '/delta/' + delta.id);
-        testData.projects[1].plans[1].transactions[1].deltas.pop();
+        testData.data.projects[1].plans[1].transactions[1].deltas.pop();
 
         const results = await Promise.all([
             testUser.get(ROOT + '/appdata'),
             testUser2.get(ROOT + '/appdata')
         ]);
         expect(results.map(res => sortDeep(res))).toEqual([
-            { data: sortDeep(testData) },
-            { data: sortDeep(testData2) }
+            sortDeep(testData),
+            sortDeep(testData2)
         ]);
     });
 
     test('Can delete transaction', async () => {
-        const transaction = testData.projects[1].plans[1].transactions[1];
+        const transaction = testData.data.projects[1].plans[1].transactions[1];
         await testUser.delete(ROOT + '/transaction/' + transaction.id);
-        testData.projects[1].plans[1].transactions.pop();
+        testData.data.projects[1].plans[1].transactions.pop();
 
         const results = await Promise.all([
             testUser.get(ROOT + '/appdata'),
             testUser2.get(ROOT + '/appdata')
         ]);
         expect(results.map(res => sortDeep(res))).toEqual([
-            { data: sortDeep(testData) },
-            { data: sortDeep(testData2) }
+            sortDeep(testData),
+            sortDeep(testData2)
         ]);
     });
 
     test('Can delete plan', async () => {
-        const plan = testData.projects[1].plans[1];
+        const plan = testData.data.projects[1].plans[1];
         await testUser.delete(ROOT + '/plan/' + plan.id);
-        testData.projects[1].plans.pop();
+        testData.data.projects[1].plans.pop();
 
         const results = await Promise.all([
             testUser.get(ROOT + '/appdata'),
             testUser2.get(ROOT + '/appdata')
         ]);
         expect(results.map(res => sortDeep(res))).toEqual([
-            { data: sortDeep(testData) },
-            { data: sortDeep(testData2) }
+            sortDeep(testData),
+            sortDeep(testData2)
         ]);
     });
 
     test('Can delete account', async () => {
-        const account = testData.projects[1].accounts[1];
+        const account = testData.data.projects[1].accounts[1];
         await testUser.delete(ROOT + '/account/' + account.id);
-        testData.projects[1].accounts.pop();
+        testData.data.projects[1].accounts.pop();
 
         const results = await Promise.all([
             testUser.get(ROOT + '/appdata'),
             testUser2.get(ROOT + '/appdata')
         ]);
         expect(results.map(res => sortDeep(res))).toEqual([
-            { data: sortDeep(testData) },
-            { data: sortDeep(testData2) }
+            sortDeep(testData),
+            sortDeep(testData2)
         ]);
     });
 
     test('Can delete project', async () => {
-        const project = testData.projects[1];
+        const project = testData.data.projects[1];
         await testUser.delete(ROOT + '/project/' + project.id);
-        testData.projects.pop();
+        testData.data.projects.pop();
 
         const results = await Promise.all([
             testUser.get(ROOT + '/appdata'),
             testUser2.get(ROOT + '/appdata')
         ]);
         expect(results.map(res => sortDeep(res))).toEqual([
-            { data: sortDeep(testData) },
-            { data: sortDeep(testData2) }
+            sortDeep(testData),
+            sortDeep(testData2)
         ]);
     });
 

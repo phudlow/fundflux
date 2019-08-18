@@ -27,6 +27,7 @@ class Table extends Component {
         }
     }
     render() {
+        const fields = this.props.fields || Object.keys(this.props.data[0]);
 
         // Create table rows
         let tableRows = this.props.data.map(data => {
@@ -36,20 +37,18 @@ class Table extends Component {
                 cells.push((
                     <td key="chkbox">
                         <Checkbox
-                            onClick={this.onCheckboxClick}
-                            isChecked={data.id === this.state.whichChecked}
+                            isChecked={data.id == this.state.whichChecked}
                         />
                     </td>
                 ));
             }
 
-            const fields = this.props.fields || Object.keys(this.props.data[0]);
-            cells = [...cells, ...this.props.fields.map((fieldName, idx) => {
+            cells = [...cells, ...fields.map((fieldName, idx) => {
                 return <td key={idx}>{data[fieldName]}</td>;
             })];
 
             return (
-                <tr key={data.id} data-id={data.id}>
+                <tr key={data.id} data-id={data.id} onClick={this.props.onRowClick || this.onCheckboxClick}>
                     {cells}
                 </tr>
             );
@@ -60,7 +59,7 @@ class Table extends Component {
         if (this.props.checkboxes) {
             tableHeadCells.push(<td width="2em" key="chkbox"></td>);
         }
-        tableHeadCells = [...tableHeadCells, this.props.fields.map((fieldName, idx) => {
+        tableHeadCells = [...tableHeadCells, fields.map((fieldName, idx) => {
             return <td key={idx}>{capitalize(fieldName)}</td>;
         })]
 

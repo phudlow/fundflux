@@ -64,7 +64,7 @@ router.get('/appdata', async (req, res) => {
         });
     }));
 
-    res.json({ data: { projects } });
+    res.json({ data: { projects }, email: req.user.email });
 });
 
 module.exports = router;
