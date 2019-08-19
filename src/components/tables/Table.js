@@ -2,6 +2,26 @@ import React, { Component } from 'react';
 import Checkbox from '../Checkbox';
 import { capitalize } from 'lodash';
 
+/**
+ * @param {Object[]}           data
+ * Array of objects containing data to be displayed
+ * @param {(String\|Number)[]} [fields]
+ * Array of fields from data to use in the table. If typeof string, the capitalized key is used as the label.
+ * @param {String|null}        [fields[].label]
+ * The custom header label to be used for this row.
+ * @param {Function}           [fields[].content]
+ * Takes row data as a param and returns the JSX content for the cell.
+ * @param {Object}             [fields[].style]
+ * Style object to be passed to the <td>
+ * @param {Boolean}            [checkboxes]
+ * True to include checkboxes as the first column on all rows
+ * @param {Number|Number[]}    [whichChecked]
+ * The id, or when allowMultipleChecked=true, the ids of the rows with checked checkboxes
+ * @param {Boolean}            [allowMultipleChecked]
+ * If true, multiple row may be checked.  If false, only one.
+ * @param {Function}           [onRowClick] Called when a row is clicked
+ * @param {Function}           [onCheckboxClick] Called when a row is clicked
+ */
 class Table extends Component {
     constructor(props) {
         super(props);
@@ -43,8 +63,16 @@ class Table extends Component {
                 ));
             }
 
-            cells = [...cells, ...fields.map((fieldName, idx) => {
-                return <td key={idx}>{data[fieldName]}</td>;
+            cells = [...cells, ...fields.map((field, idx) => {
+                let content, cellStyle;
+                if (typeof field === 'string') {
+                    content = data[field];
+                }
+                else {
+                    content = field.content(data);
+                    cellStyle = field.cellStyle;
+                }
+                return <td key={idx} style={cellStyle}>{content}</td>;
             })];
 
             return (
@@ -59,8 +87,9 @@ class Table extends Component {
         if (this.props.checkboxes) {
             tableHeadCells.push(<td width="2em" key="chkbox"></td>);
         }
-        tableHeadCells = [...tableHeadCells, fields.map((fieldName, idx) => {
-            return <td key={idx}>{capitalize(fieldName)}</td>;
+        tableHeadCells = [...tableHeadCells, fields.map((field, idx) => {
+            let label = typeof field === 'string' ? field : field.label;
+            return <td key={idx}>{capitalize(label)}</td>;
         })]
 
         return (

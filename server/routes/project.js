@@ -13,6 +13,19 @@ router.post('/project', async (req, res) => {
     });
 });
 
+router.post('/project/:id', async (req, res) => {
+    const { name, description } = req.body;
+    const id = req.params.id;
+    await query(
+        `UPDATE project SET name=$1, description=$2 WHERE id=$3`,
+        [name, description, id]);
+
+    res.json({ 
+        message: 'PROJECT_UPDATED',
+        data: { name, description, id }
+    });
+});
+
 router.delete('/project/:id', async (req, res) => {
     let result = await query('SELECT * FROM project WHERE id=$1', [req.params.id]);
     if (!result.rows.length) {

@@ -1,4 +1,4 @@
-import React, { Component } from 'React';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -24,7 +24,7 @@ class Nav extends Component {
         return (
             <nav>
                 <div>FundFlux</div>
-                <div id='user-menu'>
+                <div id='user-menu' className="menu-container">
                     <div className='clickable' onClick={this.toggleUserMenuOpen}>
                         <span>{this.props.email}</span>
                         <FontAwesomeIcon icon={[userIconType, 'user']} />

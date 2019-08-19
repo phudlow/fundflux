@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchAppData, selectingProject } from '../actions';
+import { fetchAppData } from '../actions';
 
 import Nav from './Nav';
 import Graph from './charts/Graph';
 import SelectProject from './tables/SelectProject';
 import AccountsTable from './tables/AccountsTable';
 import PlansTable from './tables/PlansTable';
+import Project from './Project';
+import ProjectForm from './forms/ProjectForm';
 
 class App extends Component {
     constructor(props) {
@@ -25,15 +27,14 @@ class App extends Component {
             <div id="app-page">
                 <Nav />
                 <main>
-                    { this.props.ui.selectingProject ? <SelectProject /> : null }
-                    <div style={{'border-bottom': '1px solid #ddd'}}>
-                        <h1 onClick={() => this.props.selectingProject()}>Project</h1>
-                        {this.props.currentProjectName}
-                    </div>
+                    { this.props.currentProjectId ? <Project /> : null }
                     {/* App<a href="/logout">Logout</a> */}
                     {/* <Graph planId={209} /> */}
                     {/* <AccountsTable checkboxes={true} projectId={149} /> */}
                     {/* <PlansTable checkboxes={true} projectId={149} /> */}
+                    { this.props.ui.selectingProject ? <SelectProject /> : null }
+                    { /* */ }
+                    { this.props.ui.editingProjectId ? <ProjectForm /> : null }
                 </main>
             </div>
         )
@@ -41,18 +42,18 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-    const { fetchedAppData, ui } = state;
+    const { fetchedAppData, ui, currentProjectId } = state;
     state = {
         fetchedAppData,
         ui,
-        currentProjectName: state.projects && state.currentProjectId && state.projects.byId[state.currentProjectId].name
+        currentProjectId
     };
     return state;
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        selectingProject: () => dispatch(selectingProject()),
+        selectingProject: which => dispatch(selectingProject(which)),
         fetchAppData: fetchAppData(dispatch)
     };
 }

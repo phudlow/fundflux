@@ -12,7 +12,9 @@ import {
 import {
     faPlus,
     faCheck,
-    faUser as faUserSolid
+    faUser as faUserSolid,
+    faChevronDown,
+    faCaretDown
 } from '@fortawesome/fontawesome-free-solid';
 
 library.add(
@@ -21,5 +23,7 @@ library.add(
     faCheck,
     faUserRegular,
     faUserSolid,
-    faPlus
+    faPlus,
+    faChevronDown,
+    faCaretDown
 );

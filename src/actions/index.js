@@ -1,4 +1,4 @@
-import { RECEIVED_APPDATA, SELECTING_PROJECT, SELECTED_PROJECT } from '../constants';
+import { RECEIVED_APPDATA, SELECTING_PROJECT, SELECTED_PROJECT, EDITING_PROJECT, UPDATED_PROJECT } from '../constants';
 
 // Follow Redux convention for normalized stores
 function normalizeAppData(data) {
@@ -88,11 +88,60 @@ export const selectedProject = projectId => {
     }
 };
 
-export const selectingProject = () => {
+export const selectingProject = which => {
     return {
-        type: SELECTING_PROJECT
+        type: SELECTING_PROJECT,
+        payload: which
     }
 };
+
+export const editingProject = projectId => {
+    return {
+        type: EDITING_PROJECT,
+        payload: projectId
+    }
+};
+
+// "Thunk" to fetch all appdata 
+export const updateProject = dispatch => {
+    return data => {
+        return fetch(`/project/${data.id}`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(
+            res => res.json(),
+            err => console.log('An error occurred: ', err)
+        )
+        .then(res => dispatch(updatedProject(data)) );
+    }
+}
+
+function updatedProject(data) {
+    return {
+        type: UPDATED_PROJECT,
+        payload: data
+    }
+}
+
+
+// "Thunk" to fetch all appdata 
+export const createProject = dispatch => {
+    return () => {
+        return fetch('/project')
+        .then(
+            res => res.json(),
+            err => console.log('An error occurred: ', err)
+        )
+        .then(res => {
+            const data = normalizeAppData(res.data);
+            data.email = res.email;
+            dispatch(recievedAppData(data));
+        });
+    }
+}
+
 
 // "Thunk" to fetch all appdata 
 export const fetchAppData = dispatch => {
