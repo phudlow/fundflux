@@ -25,5 +25,6 @@ library.add(
     faUserSolid,
     faPlus,
     faChevronDown,
-    faCaretDown
+    faCaretDown,
+    faCircleNotch
 );

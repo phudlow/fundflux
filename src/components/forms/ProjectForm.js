@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from '../modals/Modal';
-import { editingProject, updateProject, createProject } from '../../actions';
+import { editingProject, postProject } from '../../actions';
 
 class ProjectForm extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            name: this.props.project.name,
-            description: this.props.project.description
+            awaitingResponse: false,
+            name: this.props.project.name || '',
+            description: this.props.project.description || ''
         };
 
         this.getBodyHtml = this.getBodyHtml.bind(this);
@@ -23,7 +24,10 @@ class ProjectForm extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        this.props.updateProject({
+        if (this.state.awaitingResponse) {
+            return;
+        }
+        this.props.postProject({
             id: this.props.project.id,
             name: this.state.name,
             description: this.state.description
@@ -31,8 +35,8 @@ class ProjectForm extends Component {
     }
     getBodyHtml() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <h3>{`${this.props.project ? 'Update' : 'Create'} Project`}</h3>
+            <form onSubmit={this.handleSubmit} autoComplete="off">
+                <h3>{`${this.props.project.id ? 'Update' : 'Create'} Project`}</h3>
                 <label>
                     Name:
                     <input type="text" name="name" onChange={this.handleChange} value={this.state.name} />
@@ -46,7 +50,7 @@ class ProjectForm extends Component {
                 <div>
                     <div className="button red">Delete</div>
                     <div>
-                        <div className="button white" onClick={this.props.editingProject.bind(null, null)}>Cancel</div>
+                        <div className="button white cancel" onClick={this.props.editingProject.bind(null, null)}>Cancel</div>
                         <input type='Submit' className="button" defaultValue="Save" />
                     </div>
                 </div>
@@ -65,15 +69,16 @@ class ProjectForm extends Component {
 }
 
 const mapStateToProps = state => {
+    const projectId = state.ui.editingProjectId;
     return {
-        project: state.projects.byId[state.ui.editingProjectId]
+        project: projectId === 'new' ? {} : state.projects.byId[projectId]
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         editingProject: id => dispatch(editingProject(id)),
-        updateProject: data => updateProject(dispatch)(data)
+        postProject: data => postProject(dispatch)(data),
     };
 };
 

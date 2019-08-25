@@ -1,4 +1,10 @@
-import { RECEIVED_APPDATA, SELECTING_PROJECT, SELECTED_PROJECT, EDITING_PROJECT, UPDATED_PROJECT } from '../constants';
+import {
+    RECEIVED_APPDATA,
+    SELECTING_PROJECT,
+    SELECTED_PROJECT,
+    EDITING_PROJECT,
+    POSTED_PROJECT
+} from '../constants';
 
 // Follow Redux convention for normalized stores
 function normalizeAppData(data) {
@@ -102,46 +108,34 @@ export const editingProject = projectId => {
     }
 };
 
-// "Thunk" to fetch all appdata 
-export const updateProject = dispatch => {
+// Handles creation of new and editing of existing project
+export const postProject = dispatch => {
     return data => {
-        return fetch(`/project/${data.id}`, {
+        const endpoint = data.id ? `/project/${data.id}` : '/project';
+        return fetch(endpoint, {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(data)
         })
         .then(
             res => res.json(),
-            err => console.log('An error occurred: ', err)
-        )
-        .then(res => dispatch(updatedProject(data)) );
-    }
-}
-
-function updatedProject(data) {
-    return {
-        type: UPDATED_PROJECT,
-        payload: data
-    }
-}
-
-
-// "Thunk" to fetch all appdata 
-export const createProject = dispatch => {
-    return () => {
-        return fetch('/project')
-        .then(
-            res => res.json(),
-            err => console.log('An error occurred: ', err)
+            err => {
+                console.log('An error occurred: ', err);
+                dispatch(editingProject(null));
+            }
         )
         .then(res => {
-            const data = normalizeAppData(res.data);
-            data.email = res.email;
-            dispatch(recievedAppData(data));
+            dispatch(postedProject(res.data));
         });
     }
 }
 
+export const postedProject = function(data) {
+    return {
+        type: POSTED_PROJECT,
+        payload: data
+    }
+}
 
 // "Thunk" to fetch all appdata 
 export const fetchAppData = dispatch => {

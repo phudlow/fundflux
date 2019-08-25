@@ -1,4 +1,10 @@
-import { RECEIVED_APPDATA, SELECTING_PROJECT, SELECTED_PROJECT, EDITING_PROJECT, UPDATED_PROJECT } from '../constants';
+import {
+    RECEIVED_APPDATA,
+    SELECTING_PROJECT,
+    SELECTED_PROJECT,
+    EDITING_PROJECT,
+    POSTED_PROJECT
+} from '../constants';
 
 function reducer(state = {}, action) {
     switch (action.type) {
@@ -33,18 +39,18 @@ function reducer(state = {}, action) {
                     editingProjectId: action.payload
                 }
             }
-        case UPDATED_PROJECT:
+        case POSTED_PROJECT:
             return {
                 ...state,
                 ui: {
                     ...state.ui,
-                    editingProjectId: false
+                    editingProjectId: null
                 },
                 projects: {
                     byId: {
                         ...state.projects.byId,
                         [action.payload.id]: {
-                            ...state.projects.byId[action.payload.id],
+                            id: action.payload.id,
                             name: action.payload.name,
                             description: action.payload.description
                         }

@@ -5,7 +5,7 @@ import React, { Component } from 'react';
  * Must be a method of subclass if not passed as a prop.
  * @param {Function} [onOverlayClick] Called when the overlay is clicked
  * @param {Function} [onCloseBtnClick] Called when the close button is clicked
- * @param {Boolean} [visible] True of the modal is being shown
+ * @param {Boolean} [visible] True if the modal is being shown
  * @param {Boolean} includeCloseBtn True to include close button
  */
 class Modal extends Component {

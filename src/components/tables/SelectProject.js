@@ -57,7 +57,7 @@ class SelectProject extends Component {
                 <div>
                     <h3 className="split-space">
                         <span>Select Project</span>
-                        <button className="button">
+                        <button className="button" onClick={this.props.editingProject.bind(null, 'new')}>
                             <FontAwesomeIcon icon={['fas', 'plus']} />&nbsp;Create
                         </button>
                     </h3>
@@ -90,7 +90,7 @@ const mapDispatchToProps = dispatch => {
     return {
         selectedProject: id => dispatch(selectedProject(id)),
         selectingProject: which => dispatch(selectingProject(which)),
-        editingProject: id => dispatch(editingProject(id))
+        editingProject: id => dispatch(editingProject(id)),
     }
 };
 

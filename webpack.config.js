@@ -39,7 +39,7 @@ const common = {
         }),
         new HTMLWebpackPlugin({
             template: path.resolve(__dirname, 'src/common.html'),
-            inlineSource: '^signup.+js$',            
+            inlineSource: '^signup.+js$',
             chunks: ['signup'],
             filename: 'signup.html',
             title: 'FundFlux - Signup',
