@@ -38,7 +38,7 @@
     "@fortawesome/react-fontawesome": "^0.1.4",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
-    "connect-pg-simple": "^5.0.0",
+    "connect-pg-simple": "^6.0.1",
     "cors": "^2.8.5",
     "d3": "^5.9.7",
     "dotenv": "^8.0.0",
